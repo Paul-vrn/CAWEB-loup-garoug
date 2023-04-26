@@ -81,6 +81,7 @@ build:
   stage: build
   script:
     - pnpm build # build le backend et le client prisma dans apps/api/dist
+  when: always
   artifacts:
     paths:
       - apps/api/dist
