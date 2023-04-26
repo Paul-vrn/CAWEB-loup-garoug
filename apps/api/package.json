@@ -34,13 +34,16 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/supertest": "^2.0.12",
     "babel": "^6.23.0",
+    "database": "*",
     "dotenv-cli": "^7.2.1",
     "esbuild": "^0.17.11",
+    "eslint-config-wolfo": "workspace:*",
     "jest": "^29.5.0",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "tsconfig": "workspace:*",
     "tsx": "^3.12.3",
+    "types": "*",
     "typescript": "^4.9.5"
   }
 }
