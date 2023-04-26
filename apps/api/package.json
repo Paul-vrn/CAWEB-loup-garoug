@@ -37,11 +37,11 @@
     "database": "*",
     "dotenv-cli": "^7.2.1",
     "esbuild": "^0.17.11",
-    "eslint-config-wolfo": "workspace:*",
+    "eslint-config-wolfo": "*",
     "jest": "^29.5.0",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
-    "tsconfig": "workspace:*",
+    "tsconfig": "*",
     "tsx": "^3.12.3",
     "types": "*",
     "typescript": "^4.9.5"
