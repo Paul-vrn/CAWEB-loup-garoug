@@ -232,6 +232,9 @@ importers:
       cypress:
         specifier: ^12.10.0
         version: 12.10.0
+      eslint-config-wolfo:
+        specifier: '*'
+        version: link:../../packages/eslint-config-wolfo
       react-native-vector-icons:
         specifier: ^9.2.0
         version: 9.2.0
@@ -258,7 +261,7 @@ importers:
         specifier: ^4.12.0
         version: 4.12.0
       tsconfig:
-        specifier: workspace:*
+        specifier: '*'
         version: link:../tsconfig
 
   packages/eslint-config-wolfo:
@@ -290,7 +293,7 @@ importers:
   packages/types:
     devDependencies:
       tsconfig:
-        specifier: workspace:*
+        specifier: '*'
         version: link:../tsconfig
       typescript:
         specifier: ^4.9.5
