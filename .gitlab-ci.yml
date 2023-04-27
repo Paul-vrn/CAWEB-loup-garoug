@@ -102,7 +102,7 @@ scalingo:
     - gem install dpl --pre # gem est le gestionnaire de paquets pour Ruby
     - curl -O https://cli-dl.scalingo.com/install && bash install # scalingo CLI est installé
     - scalingo --app=$SCALINGO_APP_NAME env-set PROJECT_DIR=$PROJECT_DIR # Pour indiquer sur le dépôt distant où est le backend (s'il est à la racine du projet ceci est facultatif, et il est possible de le faire une fois pour toute directement dans l'interface web de scalingo)
-    - dpl --provider=scalingo --app=$SCALINGO_APP_NAME --api-token=$SCALINGO_API_TOKEN --region=$SCALINGO_REGION --branch="scalingo"
+    - dpl --provider=scalingo --app=$SCALINGO_APP_NAME --api-token=$SCALINGO_API_TOKEN --region=$SCALINGO_REGION --branch=refs/heads/scalingo
   when: always
   rules:
     - if: $CI_COMMIT_BRANCH == "scalingo"
