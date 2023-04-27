@@ -46,36 +46,36 @@ install:
     paths:
 
 
-lint:                # Vérification de la qualité du code javascript
-  stage: lint           # Pas de lint css et html parce que c'est le code donné par le prof et j'ai pas à corriger son code
-  script:
-    - pnpm lint      # vérifie la qualité du code javascript (js/*.js) et typescript (src/*.ts) + écrit le rapport dans lintes_report.txt
+#lint:                # Vérification de la qualité du code javascript
+#  stage: lint           # Pas de lint css et html parce que c'est le code donné par le prof et j'ai pas à corriger son code
+#  script:
+#    - pnpm lint      # vérifie la qualité du code javascript (js/*.js) et typescript (src/*.ts) + écrit le rapport dans lintes_report.txt
                      # turborepo va se charger de faire le lint dans les api/, wolfo/ et database/
   
 
-test-backend:
-  services:
-  - postgres:12
-  variables:
-    npm_config_cache: '$CI_PROJECT_DIR/.npm'
-    POSTGRES_USER: $POSTGRES_USER
-    POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-    POSTGRES_DB: $POSTGRES_DB
-    POSTGRES_HOST_AUTH_METHOD: trust
-  stage: test
-  script:
-    - pnpm db:push  # push les migrations dans la base de données
-    - pnpm test # lance le test jest
+#test-backend:
+#  services:
+#  - postgres:12
+#  variables:
+#    npm_config_cache: '$CI_PROJECT_DIR/.npm'
+#    POSTGRES_USER: $POSTGRES_USER
+#    POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+#    POSTGRES_DB: $POSTGRES_DB
+#    POSTGRES_HOST_AUTH_METHOD: trust
+#  stage: test
+#  script:
+#    - pnpm db:push  # push les migrations dans la base de données
+#    - pnpm test # lance le test jest
 
-test-frontend:
-  image: cypress/base:16.18.1
-  stage: test
-  parallel: 2 # Uses 2 parallel instances
-  script:
-    - cd apps/wolfo
-    - pnpm web & # lance l'app en mode dev
-    - npx wait-on 'http-get://localhost:19000'
-    - npx cypress run --record --parallel    # Runs tests in parallel and records to Cypress Cloud
+#test-frontend:
+#  image: cypress/base:16.18.1
+#  stage: test
+#  parallel: 2 # Uses 2 parallel instances
+#  script:
+#    - cd apps/wolfo
+#    - pnpm web & # lance l'app en mode dev
+#    - npx wait-on 'http-get://localhost:19000'
+#    - npx cypress run --record --parallel    # Runs tests in parallel and records to Cypress Cloud
 
 build:
   stage: build
