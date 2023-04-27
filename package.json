@@ -11,8 +11,8 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "build": "turbo run build",
-    "scalingo-postbuild": "turbo run scalingo:build",
+    "build": "echo \"build\" && turbo run build",
+    "scalingo-postbuild": "echo \"scalingo-postbuild\" && turbo run scalingo:build",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "test": "turbo run test",
