@@ -19,8 +19,7 @@
     "db:push": "turbo run db:push",
     "db:generate": "turbo run db:generate",
     "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore",
-    "prepare": "husky install"
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore"
   },
   "keywords": [],
   "author": "",
