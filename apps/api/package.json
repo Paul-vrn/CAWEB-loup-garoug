@@ -9,6 +9,7 @@
     "scalingo-postbuild": "npx prisma migrate deploy --schema=./dist/schema.prisa && npm run build",
     "scalingo:build": "npm run build",
     "start": "node dist/server.js",
+    "start:scalingo": "npm start",
     "lint": "eslint src",
     "lint:fix": "pnpm lint --fix",
     "test": "jest --coverage --detectOpenHandles --forceExit",

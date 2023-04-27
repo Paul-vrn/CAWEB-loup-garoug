@@ -11,9 +11,6 @@
       "cache": false,
       "persistent": true
     },
-    "start": {
-      "cache": false
-    },
     "type-check": {
       "outputs": []
     },
@@ -37,6 +34,10 @@
     },
     "scalingo:build": {
       "dependsOn": ["^scalingo:build"]
+    },
+    "start:scalingo": {
+      "dependsOn": ["^db:generate"],
+      "cache": false
     }
   },
   "globalEnv": [
