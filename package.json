@@ -26,11 +26,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "husky": "^8.0.3",
     "turbo": "^1.9.1",
     "typescript": "^5.0.3"
   },
   "dependencies": {
-    "husky": "^8.0.3",
     "prettier": "^2.8.7"
   }
 }
