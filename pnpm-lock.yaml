@@ -239,7 +239,7 @@ importers:
         specifier: ^12.10.0
         version: 12.10.0
       eslint-config-wolfo:
-        specifier: workspace:*
+        specifier: '*'
         version: link:../../packages/eslint-config-wolfo
       react-native-vector-icons:
         specifier: ^9.2.0
@@ -248,7 +248,7 @@ importers:
         specifier: ^0.18.10
         version: 0.18.10(react-dom@18.2.0)(react@18.2.0)
       types:
-        specifier: workspace:*
+        specifier: '*'
         version: link:../../packages/types
       typescript:
         specifier: ^4.9.4
