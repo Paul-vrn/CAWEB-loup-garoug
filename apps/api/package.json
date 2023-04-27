@@ -5,7 +5,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "esbuild src/server.ts --bundle --platform=node --outfile=dist/server.js --external:express",
+    "build": "esbuild src/server.ts --bundle --platform=node --outfile=dist/server.js",
     "scalingo:build": "npm run build",
     "start": "node dist/server.js",
     "lint": "eslint src",
