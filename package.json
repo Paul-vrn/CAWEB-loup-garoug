@@ -2,6 +2,9 @@
   "name": "projet_acolweb",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "16.16"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
