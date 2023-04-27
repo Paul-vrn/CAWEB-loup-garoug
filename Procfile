@@ -1,1 +1,1 @@
-web: npm scalingo:start
+web: npm run scalingo:start
