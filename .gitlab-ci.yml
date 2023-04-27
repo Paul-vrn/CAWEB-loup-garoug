@@ -93,7 +93,7 @@ scalingo:
     # SCALINGO_API_TOKEN # variable à ne pas définir en clair ici (cf instructions à la fin du .gitlab-ci.yml ci-dessous)
     SCALINGO_APP_NAME: wolfo-backend # le nom de votre appli chez scalingo
     SCALINGO_REGION: osc-fr1 # l'instance de scalingo sur laquelle votre appli est déployée
-    #PROJECT_DIR: apps/api
+    PROJECT_DIR: /
     GIT_DEPTH: 0
   image: ruby:3.1.3 # car dpl est codé en Ruby
   before_script: []
@@ -101,7 +101,7 @@ scalingo:
     - script/sed_package.sh # pour modifier le package.json et virer les workspaces modules
     - gem install dpl --pre # gem est le gestionnaire de paquets pour Ruby
     - curl -O https://cli-dl.scalingo.com/install && bash install # scalingo CLI est installé
-    - scalingo --app=$SCALINGO_APP_NAME env-set  # Pour indiquer sur le dépôt distant où est le backend (s'il est à la racine du projet ceci est facultatif, et il est possible de le faire une fois pour toute directement dans l'interface web de scalingo)
+    - scalingo --app=$SCALINGO_APP_NAME env-set  PROJECT_DIR=$PROJECT_DIR # Pour indiquer sur le dépôt distant où est le backend (s'il est à la racine du projet ceci est facultatif, et il est possible de le faire une fois pour toute directement dans l'interface web de scalingo)
     - dpl --provider=scalingo --app=$SCALINGO_APP_NAME --api-token=$SCALINGO_API_TOKEN --region=$SCALINGO_REGION --branch=refs/heads/main --remote=$CI_COMMIT_REF_NAME # déploiement sur scalingo
   when: always
   rules:
