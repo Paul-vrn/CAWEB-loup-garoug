@@ -35,7 +35,7 @@
     "scalingo:build": {
       "dependsOn": ["^scalingo:build"]
     },
-    "start:scalingo": {
+    "scalingo:start": {
       "dependsOn": ["^db:generate"],
       "cache": false
     }
