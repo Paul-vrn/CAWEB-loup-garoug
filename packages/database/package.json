@@ -20,6 +20,7 @@
     "db:reset": "prisma migrate reset",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "lint": "prisma validate && prisma format"
+    "lint": "prisma validate && prisma format",
+    "scalingo:build": "npm run db:deploy"
   }
 }

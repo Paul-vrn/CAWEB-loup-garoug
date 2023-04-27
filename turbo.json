@@ -31,6 +31,9 @@
     },
     "test:watch": {
       "cache": false
+    },
+    "scalingo:build": {
+      "dependsOn": ["^scalingo:build"]
     }
   },
   "globalEnv": [
