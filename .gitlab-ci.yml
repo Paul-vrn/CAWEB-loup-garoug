@@ -1,10 +1,10 @@
 image: node:latest
 
 stages:                 # Les étapes associées au projet.
-#  - lint                # Pour la vérification statique du code
-#  - test                # Test de l'application
-  - build               # Build de l'application
+  - lint                # Pour la vérification statique du code
+  - test                # Test de l'application
   - deploy              # Deploiement
+# Pas de stage "build", il est réalisé directement sur scalingo
 
 variables:
   npm_config_cache: '$CI_PROJECT_DIR/.npm'
@@ -41,7 +41,6 @@ install:
       policy: pull-push
   script:
     - pnpm install --frozen-lockfile
-    - ls -la
   artifacts:
     paths:
 
@@ -53,7 +52,33 @@ install:
                      # turborepo va se charger de faire le lint dans les api/, wolfo/ et database/
   
 
-#test-backend:
+test-backend:
+  services:
+  - postgres:12
+  variables:
+    npm_config_cache: '$CI_PROJECT_DIR/.npm'
+    POSTGRES_USER: $POSTGRES_USER
+    POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    POSTGRES_DB: $POSTGRES_DB
+    POSTGRES_HOST_AUTH_METHOD: trust
+  stage: test
+  script:
+    - pnpm db:push  # push les migrations dans la base de données
+    - pnpm db:generate
+    - cd apps/api
+    - pnpm test # lance le test jest
+  artifacts:
+    paths:
+      - apps/api/coverage/
+
+build:
+  stage: build
+  script:
+    - pnpm build # build le backend et le client prisma dans apps/api/dist
+  when: always
+
+#test-frontend:
+#  image: cypress/base:16.18.1
 #  services:
 #  - postgres:12
 #  variables:
@@ -63,32 +88,45 @@ install:
 #    POSTGRES_DB: $POSTGRES_DB
 #    POSTGRES_HOST_AUTH_METHOD: trust
 #  stage: test
-#  script:
-#    - pnpm db:push  # push les migrations dans la base de données
-#    - pnpm test # lance le test jest
-
-#test-frontend:
-#  image: cypress/base:16.18.1
-#  stage: test
 #  parallel: 2 # Uses 2 parallel instances
 #  script:
+#    - pnpm db:push
+#    - pnpm dev > /dev/null 2>&1 & # lance l'api en mode dev
 #    - cd apps/wolfo
-#    - pnpm web & # lance l'app en mode dev
+#    - pnpm web &
 #    - npx wait-on 'http-get://localhost:19000'
-#    - npx cypress run --record --parallel    # Runs tests in parallel and records to Cypress Cloud
+#    - npx cypress run --record --parallel # lance l'app en mode dev
 
-build:
-  stage: build
+
+badges:
+  stage: deploy
+  needs: [test-backend]     # Les badges dépendent de la vérification de la qualité du code
   script:
-    - pnpm build # build le backend et le client prisma dans apps/api/dist
-  when: always
+    - scripts/badges.sh # Génère les badges de qualité de code
+    - cd apps/api/
+    - pnpm exec jest-coverage-badges # Génère les badges de couverture de code
+  when: always          # On veut toujours générer les badges
   artifacts:
     paths:
-      - apps/api/dist
+      - apps/api/coverage/
+
+pages:
+  stage: deploy
+  variables:
+    GIT_DEPTH: 0
+  needs: [badges]
+  script:
+    - mkdir public/
+    - mv apps/api/coverage/* public/ # Copie les badges et le report dans public
+    - mv docs/diagrams public/
+    - ls -l public/
+  artifacts:
+    paths:
+      - public
+
 
 scalingo:
   stage: deploy
-  needs: [build]
   variables:
     # SCALINGO_API_TOKEN # variable à ne pas définir en clair ici (cf instructions à la fin du .gitlab-ci.yml ci-dessous)
     SCALINGO_APP_NAME: wolfo-backend # le nom de votre appli chez scalingo

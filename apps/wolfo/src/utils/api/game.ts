@@ -11,7 +11,6 @@ const gameApi = {
     return data;
   },
   getGame: async (id: number): Promise<Game> => {
-    console.log("getGame", id);
     const { data } = await api.get(`/games/${id}`);
     return data;
   },

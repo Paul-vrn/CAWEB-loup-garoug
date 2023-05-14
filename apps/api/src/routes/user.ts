@@ -3,7 +3,7 @@ import userController from "../controllers/user";
 import checkToken from "../middleware/checkToken";
 const router = express.Router({ mergeParams: true });
 
-router.get("/", userController.getAll);
+router.get("/", checkToken, userController.getAll);
 router.get("/me", checkToken, userController.getFromToken);
 router.post("/", userController.create);
 router.post("/login", userController.auth);

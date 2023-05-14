@@ -29,6 +29,7 @@ export type Game = {
   dayChatRoomId: number;
   nightChatRoomId: number;
   spiritChatRoomId?: number;
+  curElecId?: number;
 };
 
 export type NewGame = {

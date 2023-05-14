@@ -173,7 +173,7 @@ afterAll(async () => {
     .set("Authorization", `Bearer ${token}`)
     .set("Content-Type", "application/json");
   expect(repDelete.statusCode).toBe(200);
-  expect(repDelete.body.message).toBe("User Deleted");
+  expect(repDelete.body.message).toBe("User deleted");
 
   let repLogin = await request
     .post("/api/users/login")
@@ -188,7 +188,7 @@ afterAll(async () => {
     .set("Authorization", `Bearer ${token}`)
     .set("Content-Type", "application/json");
   expect(repDelete.statusCode).toBe(200);
-  expect(repDelete.body.message).toBe("User Deleted");
+  expect(repDelete.body.message).toBe("User deleted");
 
   repLogin = await request
     .post("/api/users/login")
@@ -203,7 +203,7 @@ afterAll(async () => {
     .set("Authorization", `Bearer ${token}`)
     .set("Content-Type", "application/json");
   expect(repDelete.statusCode).toBe(200);
-  expect(repDelete.body.message).toBe("User Deleted");
+  expect(repDelete.body.message).toBe("User deleted");
 
   repLogin = await request
     .post("/api/users/login")
@@ -218,7 +218,7 @@ afterAll(async () => {
     .set("Authorization", `Bearer ${token}`)
     .set("Content-Type", "application/json");
   expect(repDelete.statusCode).toBe(200);
-  expect(repDelete.body.message).toBe("User Deleted");
+  expect(repDelete.body.message).toBe("User deleted");
 
   repLogin = await request
     .post("/api/users/login")
@@ -233,5 +233,5 @@ afterAll(async () => {
     .set("Authorization", `Bearer ${token}`)
     .set("Content-Type", "application/json");
   expect(repDelete.statusCode).toBe(200);
-  expect(repDelete.body.message).toBe("User Deleted");
+  expect(repDelete.body.message).toBe("User deleted");
 });

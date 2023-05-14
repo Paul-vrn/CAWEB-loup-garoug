@@ -10,20 +10,28 @@ const jwt = require("jsonwebtoken");
 
 const gameController = {
   async create(req: Request, res: Response) {
+    // #swagger.tags = ['Game']
+    // #swagger.summary = 'Create game'
+    // #swagger.security = [{'bearerAuth': [] }]
     const game: NewGame = req.body;
     const token = req.headers.authorization?.split(" ")[1];
     const decodedToken = jwt.verify(token, SECRET);
     const userId = decodedToken.id;
     createGame(game, userId)
       .then(newGame => {
+        // #swagger.responses[201] = { description: "Game created", schema: { $game: { $ref: "#/definitions/Game" } } }
         res.status(201).json(newGame);
       })
       .catch(error => {
         console.log(error);
+        // #swagger.responses[400] = { description: "Error", schema: { $message: "Error" } }
         res.status(400).json(error);
       });
   },
   async get(req: Request, res: Response) {
+    // #swagger.tags = ['Game']
+    // #swagger.summary = 'Get game by id'
+    // #swagger.security = [{'bearerAuth': [] }]
     const id: number = parseInt(req.params.id, 10);
     if (isNaN(id)) {
       return res.status(400).json({ message: "Invalid id" });
@@ -46,14 +54,19 @@ const gameController = {
         },
       })
       .then(game => {
+        // #swagger.responses[200] = { description: "Game found", schema: { $game: { $ref: "#/definitions/Game" } } }
         res.json(game);
       })
       .catch(error => {
         console.log(error);
+        // #swagger.responses[400] = { description: "Error", schema: { $message: "Error" } }
         res.status(400).json(error);
       });
   },
   async getAllNotJoinByState(req: Request, res: Response) {
+    // #swagger.tags = ['Game']
+    // #swagger.summary = 'Get all games not join by state'
+    // #swagger.security = [{'bearerAuth': [] }]
     const token = req.headers.authorization?.split(" ")[1];
     const decodedToken = jwt.verify(token, SECRET);
     const userId = decodedToken.id;
@@ -88,6 +101,7 @@ const gameController = {
         },
       })
       .then(games => {
+        // #swagger.responses[200] = { description: "Games not joined", schema: { $games: [{ $ref: "#/definitions/Game" }] } }
         res.json(games);
       })
       .catch(error => {
@@ -96,6 +110,9 @@ const gameController = {
       });
   },
   async getMyGames(req: Request, res: Response) {
+    // #swagger.tags = ['Game']
+    // #swagger.summary = 'Get all games that I join'
+    // #swagger.security = [{'bearerAuth': [] }]
     const token = req.headers.authorization?.split(" ")[1];
     const decodedToken = jwt.verify(token, SECRET);
     const userId = decodedToken.id;
@@ -127,14 +144,19 @@ const gameController = {
         },
       })
       .then(games => {
+        // #swagger.responses[200] = { description: "My games", schema: { $games: [{ $ref: "#/definitions/Game" }] } }
         res.json(games);
       })
       .catch(error => {
         console.log(error);
+        // #swagger.responses[400] = { schema: { $message: "Error" } }
         res.status(400).json(error);
       });
   },
   async join(req: Request, res: Response) {
+    // #swagger.tags = ['Game']
+    // #swagger.summary = 'Join game'
+    // #swagger.security = [{'bearerAuth': [] }]
     const token = req.headers.authorization?.split(" ")[1];
     const decodedToken = jwt.verify(token, SECRET);
     const userId = decodedToken.id;
@@ -174,14 +196,19 @@ const gameController = {
         }
       })
       .then(player => {
+        // #swagger.responses[201] = { description: "Game join", schema: { $message: "Game join", $player: { $ref: "#/definitions/Player" } } }
         res.status(201).json({ message: "Game joined", player });
       })
       .catch(error => {
         console.log(error);
+        // #swagger.responses[400] = { schema: { $message: "Error" } }
         res.status(400).json(error);
       });
   },
   async leave(req: Request, res: Response) {
+    // #swagger.tags = ['Game']
+    // #swagger.summary = 'Leave game'
+    // #swagger.security = [{'bearerAuth': [] }]
     const token = req.headers.authorization?.split(" ")[1];
     const decodedToken = jwt.verify(token, SECRET);
     const userId = decodedToken.id;
@@ -200,10 +227,12 @@ const gameController = {
         },
       })
       .then(player => {
+        // #swagger.responses[201] = { description: "Game left", schema: { $message: "Game left", $player: { $ref: "#/definitions/Player" } } }
         res.status(201).json({ message: "Game left", player });
       })
       .catch(error => {
         console.log(error);
+        // #swagger.responses[400] = { schema: { $message: "Error" } }
         res.status(400).json(error);
       });
   },
@@ -248,6 +277,9 @@ const gameController = {
       });
   },
   delete(req: Request, res: Response) {
+    // #swagger.tags = ['Game']
+    // #swagger.summary = 'Delete a game'
+    // #swagger.security = [{'bearerAuth': [] }]
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
       return res.status(400).json({ message: "Invalid id" });

@@ -5,6 +5,11 @@ import { StyleSheet, View } from "react-native";
 import { Game, StateGame } from "types";
 import { parseDeadline } from "../../utils/services/parsedate";
 
+import { Image } from "react-native";
+import DayIcon from "../../../assets/UI/day.png";
+import HourglassIcon from "../../../assets/UI/hourglass.png";
+import NightIcon from "../../../assets/UI/night.png";
+
 interface GameItemProps {
   game: Game;
   handleFunction: (id: number) => void;
@@ -13,7 +18,7 @@ export const GameItemLobby = ({ game, handleFunction }: GameItemProps) => {
   return (
     <ListItem
       title={game.name}
-      description={"Début : " + parseDeadline(game.deadline, game.startDay)}
+      description={"Start : " + parseDeadline(game.deadline, game.startDay)}
       accessoryLeft={() => <FontAwesome name="hourglass-o" size={24} color="black" />}
       accessoryRight={() => {
         return (
@@ -43,9 +48,9 @@ export const GameItemInGame = ({ game, handleFunction }: GameItemProps) => {
       description={"In game"}
       accessoryLeft={() =>
         game.state === StateGame.DAY ? (
-          <FontAwesome name="sun-o" size={24} color="black" />
+          <Image source={DayIcon} style={styles.icon} />
         ) : (
-          <FontAwesome name="moon-o" size={24} color="black" />
+          <Image source={NightIcon} style={styles.icon} />
         )
       }
     />
@@ -57,7 +62,7 @@ export const GameItemNotJoined = ({ game, handleFunction }: GameItemProps) => {
     <ListItem
       title={game.name}
       description={"Début : " + parseDeadline(game.deadline, game.startDay)}
-      accessoryLeft={() => <FontAwesome name="hourglass-o" size={24} color="black" />}
+      accessoryLeft={() => <Image source={HourglassIcon} style={styles.icon} />}
       accessoryRight={() => {
         return (
           <View style={styles.containerRight}>
@@ -86,5 +91,9 @@ const styles = StyleSheet.create({
   containerRight: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  icon: {
+    width: 19,
+    height: 24,
   },
 });

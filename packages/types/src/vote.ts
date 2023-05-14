@@ -1,5 +1,5 @@
 export type Vote = {
-  voteId: string;
+  voterId: string;
   targetId: string;
   gameId: number;
   electionId: number;

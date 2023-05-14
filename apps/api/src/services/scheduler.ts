@@ -83,12 +83,28 @@ export const relaunchGames = async () => {
       deadline: true,
       startDay: true,
       endDay: true,
+      nightChatRoomId: true,
+      dayChatRoomId: true,
     },
   });
-  games.forEach(game => {
+  games.forEach(async game => {
     if (game.state === StateGame.LOBBY) {
       if (!createDeadlineJob(game.deadline, game.id, game.startDay)) {
-        prisma.game.delete({ where: { id: game.id } });
+        await prisma.$transaction(async transaction => {
+          if (!game) {
+            throw new Error("Game not found");
+          }
+          await transaction.game.delete({
+            where: { id: game.id },
+          });
+          await transaction.chatRoom.delete({
+            where: { id: game.dayChatRoomId },
+          });
+          await transaction.chatRoom.delete({
+            where: { id: game.nightChatRoomId },
+          });
+          return game;
+        });
       }
     } else if (game.state === StateGame.DAY || game.state === StateGame.NIGHT) {
       createNewDayJob(game.startDay, game.id);

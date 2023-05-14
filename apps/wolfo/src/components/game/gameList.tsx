@@ -2,10 +2,13 @@ import { AntDesign } from "@expo/vector-icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Divider, List, Text } from "@ui-kitten/components";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { Platform, StyleSheet, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Game, StateGame } from "types";
 import { getGamesLobby, getMyGames, joinGame, leaveGame } from "../../utils/api/game";
+import { AuthContext } from "../context/tokenContext";
 import Loading from "../loading";
 import { ModalConfirmChoice } from "../modals/modalConfirm";
 import { GameItemInGame, GameItemLobby, GameItemNotJoined } from "./gameItem";
@@ -18,20 +21,22 @@ export const ListGamesLobby: React.FC<ListProps> = ({ search }) => {
   const queryClient = useQueryClient();
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedGame, setSelectedGame] = useState<number>(0);
+  const { token } = useContext(AuthContext);
   const toggleVisible = () => setVisible(!visible);
   const {
     data: games,
     isLoading,
     refetch,
   } = useQuery<Game[]>({
+    enabled: Boolean(token),
     queryKey: ["games"],
     queryFn: getGamesLobby,
     refetchOnMount: true,
+    cacheTime: 0,
   });
   const { mutate } = useMutation<any, Error, number>({
     mutationFn: (gameId: number) => joinGame(gameId),
-    onSuccess: data => {
-      console.log(data);
+    onSuccess: () => {
       refetch();
       queryClient.invalidateQueries(["mygames"]);
     },
@@ -51,18 +56,36 @@ export const ListGamesLobby: React.FC<ListProps> = ({ search }) => {
     <GameItemNotJoined key={item.id} game={item} handleFunction={handleJoin} />
   );
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.listContainer}>
       {games ? (
-        <List
-          data={filteredGames}
-          renderItem={listGame}
-          ItemSeparatorComponent={Divider}
-          onRefresh={refetch}
-          refreshing={isLoading}
-        />
+        // si web le scrollview intégré à list marche pas donc on bidouille un scrollview + reload button
+        Platform.OS === "web" ? (
+          <ScrollView>
+            <Button onPress={() => refetch()}>
+              <AntDesign name="reload1" size={10} color="black" />
+            </Button>
+            <List
+              nestedScrollEnabled
+              data={filteredGames}
+              renderItem={listGame}
+              ItemSeparatorComponent={Divider}
+              onRefresh={refetch}
+              refreshing={isLoading}
+            />
+          </ScrollView>
+        ) : (
+          <List
+            nestedScrollEnabled
+            data={filteredGames}
+            renderItem={listGame}
+            ItemSeparatorComponent={Divider}
+            onRefresh={refetch}
+            refreshing={isLoading}
+          />
+        )
       ) : (
         <Button onPress={() => refetch()}>
-          <AntDesign name="reload1" size={24} color="black" />
+          <AntDesign name="reload1" size={10} color="black" />
         </Button>
       )}
       <ModalConfirmChoice
@@ -82,23 +105,25 @@ export const ListMyGames: React.FC<ListProps> = ({ search }) => {
   const queryClient = useQueryClient();
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedGame, setSelectedGame] = useState<number>(0);
+  const { token } = useContext(AuthContext);
+
   const toggleVisible = () => setVisible(!visible);
   const router = useRouter();
-
   const {
     data: games,
     isLoading,
     isError,
     refetch,
   } = useQuery<Game[]>({
+    enabled: Boolean(token),
     queryKey: ["mygames"],
     queryFn: getMyGames,
     refetchOnMount: true,
+    cacheTime: 0,
   });
   const { mutate } = useMutation<any, Error, number>({
     mutationFn: (gameId: number) => leaveGame(gameId),
-    onSuccess: data => {
-      console.log(data);
+    onSuccess: () => {
       refetch();
       queryClient.invalidateQueries(["games"]);
     },
@@ -106,14 +131,10 @@ export const ListMyGames: React.FC<ListProps> = ({ search }) => {
   if (isLoading) {
     return <Loading title="Loading mygames" message="loading list of games" />;
   }
-  if (isError) {
-    return <Text>error</Text>;
-  }
   const handleLeave = (gameId: number) => {
     setSelectedGame(gameId);
     toggleVisible();
   };
-
   const filteredGames = games?.filter((game: Game) =>
     game.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -125,19 +146,40 @@ export const ListMyGames: React.FC<ListProps> = ({ search }) => {
     );
   };
   return (
-    <SafeAreaView>
-      {games ? (
-        <List
-          data={filteredGames}
-          renderItem={listGame}
-          ItemSeparatorComponent={Divider}
-          onRefresh={refetch}
-          refreshing={isLoading}
-        />
+    <SafeAreaView style={styles.listContainer}>
+      {!isError && games.length !== 0 ? (
+        // si web le scrollview intégré à list marche pas donc on bidouille un scrollview + reload button
+        Platform.OS === "web" ? (
+          <ScrollView>
+            <Button onPress={() => refetch()}>
+              <AntDesign name="reload1" size={10} color="black" />
+            </Button>
+            <List
+              nestedScrollEnabled
+              data={filteredGames}
+              renderItem={listGame}
+              ItemSeparatorComponent={Divider}
+              onRefresh={refetch}
+              refreshing={isLoading}
+            />
+          </ScrollView>
+        ) : (
+          <List
+            nestedScrollEnabled
+            data={filteredGames}
+            renderItem={listGame}
+            ItemSeparatorComponent={Divider}
+            onRefresh={refetch}
+            refreshing={isLoading}
+          />
+        )
       ) : (
-        <Button onPress={refetch}>
-          <AntDesign name="reload1" size={24} color="black" />
-        </Button>
+        <View style={styles.view}>
+          {isError && <Text style={styles.text}>An error occured. Please try refreshing.</Text>}
+          <Button onPress={async () => await refetch()}>
+            <AntDesign name="reload1" size={10} color="black" />
+          </Button>
+        </View>
       )}
       <ModalConfirmChoice
         title="Validation"
@@ -151,3 +193,19 @@ export const ListMyGames: React.FC<ListProps> = ({ search }) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  listContainer: {
+    flex: Platform.OS === "web" ? 1 : undefined,
+  },
+  view: {
+    borderRadius: 24,
+  },
+  text: {
+    padding: "1em",
+  },
+  icon: {
+    width: 24,
+    height: 24,
+  },
+});

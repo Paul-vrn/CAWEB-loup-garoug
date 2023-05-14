@@ -63,12 +63,12 @@ const newPeriod = async (day: boolean, gameId: number) => {
 
       // on supprime le job si la game est fini
       if (state === StateGame.END) {
-        notificationService.endGame(transaction, game.players, game.name);
+        await notificationService.endGame(transaction, game.players, game.name);
         deleteJob(gameId, JobType.NEW_NIGHT);
         deleteJob(gameId, JobType.NEW_DAY);
       } else {
-        if (day) notificationService.newDay(transaction, game.players, game.name);
-        else notificationService.newNight(transaction, game.players, game.name);
+        if (day) await notificationService.newDay(transaction, game.players, game.name);
+        else await notificationService.newNight(transaction, game.players, game.name);
       }
     })
     .then(() => {

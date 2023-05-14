@@ -11,8 +11,6 @@ const playerApi = {
     return data;
   },
   updatePlayer: async (player: Player) => {
-    console.log("component");
-    console.log(player);
     const { data } = await api.patch(`games/${player.gameId}/players/${player.userId}`, player);
     return data;
   },

@@ -42,6 +42,7 @@ const startGame = async (gameId: number) => {
       const players = game.players;
       if (players.length < game.minPlayer) {
         await transaction.game.delete({ where: { id: gameId } });
+        await notificationService.gameDeleted(transaction, players, game.name);
         return Promise.resolve("Not enough players");
       }
       const playersChatters = players.map(player => ({

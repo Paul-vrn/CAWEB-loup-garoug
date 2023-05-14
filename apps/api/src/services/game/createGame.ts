@@ -20,12 +20,18 @@ const createGame = async (game: NewGame, userId: string) => {
           chatRoom: { create: {} },
         },
       });
+      const spiritChat = await transaction.spiritChatRoom.create({
+        data: {
+          chatRoom: { create: {} },
+        },
+      });
 
       const newGame = await transaction.game.create({
         data: {
           ...game,
           dayChatRoomId: dayChat.id,
           nightChatRoomId: nightChat.id,
+          spiritChatRoomId: spiritChat.id,
         },
       });
 

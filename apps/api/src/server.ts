@@ -1,6 +1,6 @@
 import cors from "cors";
 import { Server, Socket } from "socket.io";
-import { NewMessage } from "types";
+import { Message, NewMessage } from "types";
 import app from "./app";
 import prisma from "./prisma";
 import { relaunchGames } from "./services/scheduler";
@@ -30,28 +30,22 @@ io.on("connection", (socket: Socket) => {
     console.log("user disconnected");
   });
 
-  /* export type Message = {
-  id: number;
-  chatRoomId: number;
-  content: string;
-  authorId: string;
-  gameId: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type NewMessage = {
-  chatRoomId: number;
-  content: string;
-  authorId: string;
-  gameId: number;
-}; */
-
-  socket.on("messagePosted", async (message: NewMessage) => {
+  socket.on("messagePosted", async (args: [NewMessage, boolean]) => {
+    const [message, gotPermission] = args;
+    if (!gotPermission) {
+      console.error("You don't have permission to post a message");
+    }
     try {
-      const newMessage = await prisma.message.create({
+      // author is the user of userId message.authorId and in the game of gameId message.gameId
+      const author = await prisma.user.findUnique({
+        where: {
+          id: message.authorId,
+        },
+      });
+      const messageObj: Message = await prisma.message.create({
         data: {
           content: message.content,
+          // author is the user of userId message.authorId and in the game of gameId message.gameId
           author: {
             connect: {
               userId_gameId: {
@@ -66,9 +60,13 @@ export type NewMessage = {
             },
           },
         },
+        include: {
+          author: true,
+        },
       });
 
-      io.to(`chatRoom-${message.chatRoomId}`).emit("newMessage", newMessage);
+      console.log("args of messagePosted:", [messageObj, author]);
+      io.to(`chatRoom-${message.chatRoomId}`).emit("newMessage", [messageObj, author]);
     } catch (error) {
       console.error("Error creating and sending message:", error);
     }

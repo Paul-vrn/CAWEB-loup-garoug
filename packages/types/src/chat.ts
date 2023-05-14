@@ -5,6 +5,7 @@ export type Message = {
   chatRoomId: number;
   content: string;
   authorId: string;
+  author?: any;
   gameId: number;
   createdAt: Date;
   updatedAt: Date;

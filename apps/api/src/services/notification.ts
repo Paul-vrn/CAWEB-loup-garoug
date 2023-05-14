@@ -44,6 +44,19 @@ const notificationService = {
     });
     await Promise.all(notificationPromise);
   },
+  async gameDeleted(transaction: TransactionType, players: Player[], gameName: string) {
+    const notificationPromise = players.map(player => {
+      return transaction.notification.create({
+        data: {
+          userId: player.userId,
+          title: `La partie ${gameName} a été supprimée`,
+          content: "En raison d'un manquant de participants, la partie a été supprimée",
+          link: "/",
+        },
+      });
+    });
+    await Promise.all(notificationPromise);
+  },
   async endGame(transaction: TransactionType, players: Player[], gameName: string) {
     const lgWin =
       players.filter(player => player.state === StatePlayer.ALIVE && player.role === Role.WOLF)

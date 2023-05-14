@@ -124,13 +124,13 @@ model Vote {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@id([voterId, targetId, electionId])
+  @@id([voterId, electionId])
 }
 
 model ChatRoom {
   id        Int              @id @default(autoincrement())
   messages  Message[]
-  readers   Reader[]  
+  readers   Reader[]
   writers   Writer[]
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
@@ -141,7 +141,7 @@ model ChatRoom {
 
 model NightChatRoom {
   id       Int      @id @default(autoincrement())
-  game     Game?    
+  game     Game?
   chatRoom ChatRoom @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
@@ -159,10 +159,10 @@ model SpiritChatRoom {
 
 model Message {
   id         Int      @id @default(autoincrement())
-  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId Int
   content    String
-  author     Player   @relation(fields: [authorId, gameId], references: [userId, gameId])
+  author     Player   @relation(fields: [authorId, gameId], references: [userId, gameId], onDelete: Cascade)
   authorId   String
   gameId     Int
   createdAt  DateTime @default(now())

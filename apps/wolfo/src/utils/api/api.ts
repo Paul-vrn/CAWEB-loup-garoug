@@ -8,10 +8,11 @@ const api = axios.create({
 });
 let token: string | null = null;
 
-export const setToken = (newToken: string | null) => {
+export const setTokenApi = (newToken: string | null) => {
   token = newToken;
 };
-export const getToken = () => token;
+export const getTokenApi = () => token;
+
 api.interceptors.request.use(
   async config => {
     if (token) {

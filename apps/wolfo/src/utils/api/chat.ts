@@ -6,7 +6,7 @@ const chatApi = {
     const { data } = await api.get(`/chatrooms/${chatRoomId}/messages`);
     return data;
   },
-  getHistory: async (chatRoomId: string): Promise<Message[]> => {
+  getHistory: async (chatRoomId: number): Promise<Message[]> => {
     const { data } = await api.get(`/chatrooms/${chatRoomId}/history`);
     return data;
   },
@@ -18,6 +18,19 @@ const chatApi = {
     const { data } = await api.post("/chatrooms", chatroom);
     return data;
   },
+
+  addDeadToChatroom: async (
+    chatRoomId: number,
+    userDeadId: string,
+    gameId: number
+  ): Promise<void> => {
+    const response = await api.post(`/chatrooms/${chatRoomId}/adduserdead`, { userDeadId, gameId });
+
+    if (response.status !== 200) {
+      throw new Error("Failed to add dead to spirit");
+    }
+  },
+
   postMessage: async (
     chatRoomId: string,
     content: string,
@@ -34,6 +47,18 @@ const chatApi = {
       throw new Error("Failed to send message");
     }
   },
+  getPermissions: async (chatRoomId: number): Promise<{ write: boolean; read: boolean }> => {
+    const { data } = await api.get(`/chatrooms/${chatRoomId}/permissions`);
+    return data;
+  },
 };
 
-export const { getMessages, getHistory, createChatroom, getChatrooms, postMessage } = chatApi;
+export const {
+  getMessages,
+  getHistory,
+  createChatroom,
+  getChatrooms,
+  postMessage,
+  getPermissions,
+  addDeadToChatroom,
+} = chatApi;
