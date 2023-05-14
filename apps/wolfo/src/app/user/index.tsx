@@ -13,6 +13,7 @@ import { deleteUser, updateUser } from "../../utils/api/user";
 const Settings = () => {
   const { name: defaultName, id, handleSetToken } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isError, setIsError] = useState<boolean>(false);
   const [name, setName] = useState<string>(defaultName);
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -48,6 +49,7 @@ const Settings = () => {
   };
   const handleModify = async () => {
     if (password !== confirmPassword) {
+      setIsError(true);
       setErrorMessage("Passwords don't match");
       return;
     }
@@ -60,7 +62,7 @@ const Settings = () => {
       <View style={styles.centeredView}>
         <View style={styles.wrapperTitle}>
           <View style={styles.line}>
-            <Text> </Text>
+            <Text>{""}</Text>
           </View>
           <Text style={styles.h2}>Settings</Text>
           <Text style={styles.textName}>{name}</Text>
@@ -118,11 +120,11 @@ const Settings = () => {
           )}
         </Button>
 
-        {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
+        {isError && <Text style={styles.errorText}>{errorMessage}</Text>}
       </View>
       <ModalConfirmChoice
         title="Confirm modification"
-        description="Voulez vous modifier vos informations?"
+        description="Do you want to modify your information?"
         visible={visibleModify}
         setVisible={setVisibleModify}
         confirmFunction={handleModify}
@@ -130,7 +132,7 @@ const Settings = () => {
 
       <ModalConfirmChoice
         title="Delete your account"
-        description="Voulez vous supprimer votre compte?"
+        description="Do you wish to delete your account?"
         visible={visibleDelete}
         setVisible={setVisibleDelete}
         confirmFunction={deleteQuery}
@@ -144,6 +146,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "#141313",
     alignItems: "center",
+    height: "100%",
   },
   centeredView: {
     alignItems: "center",
@@ -177,13 +180,16 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
     marginTop: "10%",
     marginBottom: 40,
   },
   line: {
+    position: "relative",
     borderColor: "#C38100",
-    borderWidth: 1,
-    width: "150%",
+    height: 0,
+    borderBottomWidth: 2,
+    width: "100%",
   },
   image: {
     width: 200,

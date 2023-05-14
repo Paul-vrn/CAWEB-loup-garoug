@@ -48,11 +48,13 @@ const SeerView = () => {
 
   const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isButtonSelected, setIsButtonSelected] = useState(false);
   const [isErrorUpdate, setErrorMessageUpdate] = useState<string>("");
 
   const handlePlayerClick = async (player: Player) => {
     setSelectedPlayer(player);
     setIsButtonDisabled(true);
+    setIsButtonSelected(true);
     // Update the seer's power usage
     const updatedSeer: Player = {
       ...currentPlayer!,
@@ -87,9 +89,9 @@ const SeerView = () => {
 
           <View style={styles.mainWrapper}>
             <Text style={styles.h2}>Unveil the truth</Text>
-            {game.players &&
+            {!isButtonSelected &&
               game.players
-                .filter((player: Player) => player.userId !== userId)
+                .filter((player: Player) => player.userId !== userId && player.state === "ALIVE")
                 .map((player: Player) => (
                   <Button
                     key={player.userId}

@@ -7,16 +7,14 @@ import { Day, GiftedChat, IMessage, InputToolbar } from "react-native-gifted-cha
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import io, { Socket } from "socket.io-client";
 import { Game, Message, NewMessage, Player, StateGame } from "types";
+import { AuthContext } from "../../../../components/context/tokenContext";
 import { getMessages, getPermissions } from "../../../../utils/api/chat";
 import { getGame } from "../../../../utils/api/game";
 import { getPlayer } from "../../../../utils/api/player";
-
-const IP = process.env.IP || "localhost";
-const PORT = process.env.PORT || 3000;
-const socketEndpoint = `http://${IP}:${PORT}`;
-
-import { AuthContext } from "../../../../components/context/tokenContext";
 import useFont from "../../../../utils/hooks/useFont";
+
+//const socketEndpoint = `http://localhost:3000`;
+const socketEndpoint = "https://wolfo-backend.osc-fr1.scalingo.io:22769";
 
 const ChatRoomView = () => {
   //console.log(usePathname());

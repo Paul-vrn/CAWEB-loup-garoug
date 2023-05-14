@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     marginTop: 10,
+    paddingHorizontal: 30,
     alignItems: "center",
     borderRadius: 24,
     boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.15)",

@@ -8,7 +8,7 @@ let token: string = "";
 beforeAll(async () => {
   const response = await request.post("/api/users/").set("Content-Type", "application/json").send({
     name: "userone",
-    password: "userone",
+    password: "Mot2passe?",
   });
   expect(response.status).toBe(201);
   expect(response.body).toHaveProperty("token");
@@ -18,7 +18,9 @@ beforeAll(async () => {
 describe("Scénario création de deux comptes avec meme nom", () => {
   describe("POST /api/users/ johnny", () => {
     test("Test account creation", async () => {
-      const response = await request.post("/api/users/").send({ name: "johnny", password: "john" });
+      const response = await request
+        .post("/api/users/")
+        .send({ name: "johnny", password: "Mot2passe?" });
       expect(response.statusCode).toBe(201);
       expect(response.body.message).toBe("User created");
       expect(response.body).toHaveProperty("token");
@@ -29,7 +31,7 @@ describe("Scénario création de deux comptes avec meme nom", () => {
     test("Test double account creation", async () => {
       const response = await request
         .post("/api/users/")
-        .send({ name: "johnny", password: "johndoe" });
+        .send({ name: "johnny", password: "Mot2passe?" });
       expect(response.statusCode).toBe(400);
       expect(response.body.message).toBe("Name already exists");
     });
@@ -60,7 +62,7 @@ describe("Test scénario login -> update account", () => {
       const response = await request
         .post("/api/users/login")
         .set("Content-Type", "application/json")
-        .send({ name: "userone", password: "userone" });
+        .send({ name: "userone", password: "Mot2passe?" });
       expect(response.statusCode).toBe(200);
       expect(response.body.message).toBe("User logged in");
       expect(response.body).toHaveProperty("token");
@@ -73,7 +75,7 @@ describe("Test scénario login -> update account", () => {
         .patch("/api/users/")
         .set("Authorization", `Bearer ${token}`)
         .set("Content-Type", "application/json")
-        .send({ name: "userone", password: "userone2" });
+        .send({ name: "userone", password: "Mot2passe?" });
       expect(response.statusCode).toBe(200);
       expect(response.body.message).toBe("User updated");
       expect(response.body).toHaveProperty("token");
@@ -85,7 +87,9 @@ describe("Test scénario login -> update account", () => {
 describe("scénario création de compte -> update d'un autre compte avec meme nom", () => {
   describe("POST /api/users/ test", () => {
     test("Test account creation", async () => {
-      const response = await request.post("/api/users/").send({ name: "test", password: "test" });
+      const response = await request
+        .post("/api/users/")
+        .send({ name: "testtt", password: "Mot2passe?" });
       expect(response.statusCode).toBe(201);
       expect(response.body.message).toBe("User created");
       expect(response.body).toHaveProperty("token");
@@ -96,7 +100,7 @@ describe("scénario création de compte -> update d'un autre compte avec meme no
       const response = await request
         .post("/api/users/login")
         .set("Content-Type", "application/json")
-        .send({ name: "userone", password: "userone2" });
+        .send({ name: "userone", password: "Mot2passe?" });
       expect(response.statusCode).toBe(200);
       expect(response.body.message).toBe("User logged in");
       expect(response.body).toHaveProperty("token");
@@ -109,15 +113,16 @@ describe("scénario création de compte -> update d'un autre compte avec meme no
         .patch("/api/users/")
         .set("Authorization", `Bearer ${token}`)
         .set("Content-Type", "application/json")
-        .send({ name: "test", password: "userone2" });
+        .send({ name: "testtt", password: "Mot2passe?" });
       expect(response.statusCode).toBe(400);
       expect(response.body.message).toBe("Name already exists");
     });
   });
   describe("delete /api/users/", () => {
     test("Now delete test user", async () => {
-      token = (await request.post("/api/users/login").send({ name: "test", password: "test" })).body
-        .token;
+      token = (
+        await request.post("/api/users/login").send({ name: "testtt", password: "Mot2passe?" })
+      ).body.token;
       const response = await request
         .delete("/api/users/")
         .set("Authorization", `Bearer ${token}`)
@@ -133,7 +138,7 @@ describe("POST /api/users/login", () => {
     const response = await request
       .post("/api/users/login")
       .set("Content-Type", "application/json")
-      .send({ name: "moustikman", password: "userone" });
+      .send({ name: "moustikman", password: "Mot2passe?" });
     expect(response.statusCode).toBe(401);
     expect(response.body.message).toBe("Name not found");
   });
@@ -144,7 +149,7 @@ describe("POST /api/users/login 1", () => {
     const response = await request
       .post("/api/users/login")
       .set("Content-Type", "application/json")
-      .send({ name: "userone", password: "userone" });
+      .send({ name: "userone", password: "aaaa" });
     expect(response.statusCode).toBe(401);
     expect(response.body.message).toBe("Wrong password");
   });
@@ -155,7 +160,7 @@ describe("POST /api/users/login 2", () => {
     const response = await request
       .post("/api/users/login")
       .set("Content-Type", "application/json")
-      .send({ name: "userone", password: "userone2" });
+      .send({ name: "userone", password: "Mot2passe?" });
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toBe("User logged in");
     expect(response.body).toHaveProperty("token");

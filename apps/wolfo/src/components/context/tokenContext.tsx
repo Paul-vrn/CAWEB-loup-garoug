@@ -21,11 +21,22 @@ interface AuthProviderProps {
 }
 
 const tokenFromStorage = async () => {
+  let token = null;
   if (Platform.OS === "web") {
-    return await localStorage.getItem("token");
+    token = await localStorage.getItem("token");
   } else {
-    return await SecureStore.getItemAsync("token");
+    token = await SecureStore.getItemAsync("token");
   }
+
+  if (token !== null) {
+    const decodedToken: any = jwtDecode(token);
+    const expTimestamp = decodedToken.exp;
+    const expDate = new Date(expTimestamp * 1000);
+    if (expDate <= new Date()) {
+      return null;
+    }
+  }
+  return token;
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {

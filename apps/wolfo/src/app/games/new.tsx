@@ -51,10 +51,10 @@ const NewGame = () => {
 
   /* Probabilities */
   const [wolfProb, setWolfProb] = useState<number>(33);
-  const [seerProb, setSeerProb] = useState<number>(0);
-  const [insomProb, setInsomProb] = useState<number>(0);
-  const [contProb, setContProb] = useState<number>(0);
-  const [spiritProb, setSpiritProb] = useState<number>(0);
+  const [seerProb, setSeerProb] = useState<number>(15);
+  const [insomProb, setInsomProb] = useState<number>(15);
+  const [contProb, setContProb] = useState<number>(15);
+  const [spiritProb, setSpiritProb] = useState<number>(15);
 
   const toggleView = () => {
     setIsVisible(!isVisible);
@@ -150,7 +150,7 @@ const NewGame = () => {
           <View style={styles.viewWrapper}>
             <View style={styles.wrapperTitle}>
               <View style={styles.line}>
-                <Text>{""}</Text>
+                <Text> </Text>
               </View>
               <Text style={styles.h2}>New Game</Text>
             </View>
@@ -427,9 +427,15 @@ const NewGame = () => {
             <Button onPress={toggleView} style={styles.toggleButton}>
               {() =>
                 isVisible ? (
-                  <Image source={upIcon} style={styles.toggleIcon} />
+                  <View style={styles.toggleView}>
+                    <Text style={styles.toggleText}>Hide advanced settings</Text>
+                    <Image source={upIcon} style={styles.toggleIcon} />
+                  </View>
                 ) : (
-                  <Image source={downIcon} style={styles.toggleIcon} />
+                  <View style={styles.toggleView}>
+                    <Text style={styles.toggleText}>Show advanced settings</Text>
+                    <Image source={downIcon} style={styles.toggleIcon} />
+                  </View>
                 )
               }
             </Button>
@@ -526,8 +532,8 @@ const styles = StyleSheet.create({
   toggleIcon: {
     flex: 1,
     resizeMode: "contain",
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
   },
   toggleButton: {
     backgroundColor: "transparent",
@@ -543,11 +549,26 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: "15%",
     backgroundColor: "#C38100",
+    borderRadius: 24,
   },
   text: {
     fontFamily: "Montserrat",
-    fontSize: 17,
-    color: "#fffaf9",
+    fontSize: 15,
+    color: "#C38100",
+    marginLeft: 5,
+  },
+  toggleView: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  toggleText: {
+    fontFamily: "Montserrat",
+    fontSize: 15,
+    color: "#C38100",
+    marginLeft: 5,
+    marginBottom: 5,
   },
   thumbSlider: {
     height: 15,
@@ -570,7 +591,8 @@ const styles = StyleSheet.create({
   line: {
     borderColor: "#C38100",
     borderWidth: 1,
-    width: "80%",
+    width: "95%",
+    height: 1,
   },
   h2: {
     backgroundColor: "#141313",

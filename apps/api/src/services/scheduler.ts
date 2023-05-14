@@ -54,7 +54,7 @@ export const createDeadlineJob = (deadline: Date, gameId: number, startDay: Date
   const dateString = `${start.getUTCSeconds()} ${start.getUTCMinutes()} ${start.getUTCHours()} ${date.getUTCDate()} ${
     date.getUTCMonth() + 1
   } *`;
-  //console.log("cron at ", dateString);
+  console.log("cron at ", dateString);
   const job = cron.schedule(dateString, async () => startGame(gameId));
   deadlineJobs[gameId] = job;
   return true;

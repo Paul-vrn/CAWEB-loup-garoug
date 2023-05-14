@@ -13,14 +13,14 @@ beforeAll(async () => {
     .set("Content-Type", "application/json")
     .send({
       name: "usertwo",
-      password: "usertwo",
+      password: "Mot2passe?",
     });
   expect(repCreation.status).toBe(201);
   expect(repCreation.body).toHaveProperty("token");
   const repLogin = await request
     .post("/api/users/login")
     .set("Content-Type", "application/json")
-    .send({ name: "usertwo", password: "usertwo" });
+    .send({ name: "usertwo", password: "Mot2passe?" });
   expect(repLogin.statusCode).toBe(200);
   expect(repLogin.body.message).toBe("User logged in");
   expect(repLogin.body).toHaveProperty("token");
@@ -28,22 +28,22 @@ beforeAll(async () => {
   // now we create the other players
   await request.post("/api/users/").set("Content-Type", "application/json").send({
     name: "player1",
-    password: "player1",
+    password: "Mot2passe?",
   });
 
   await request.post("/api/users/").set("Content-Type", "application/json").send({
     name: "player2",
-    password: "player2",
+    password: "Mot2passe?",
   });
 
   await request.post("/api/users/").set("Content-Type", "application/json").send({
     name: "player3",
-    password: "player3",
+    password: "Mot2passe?",
   });
 
   await request.post("/api/users/").set("Content-Type", "application/json").send({
     name: "player4",
-    password: "player4",
+    password: "Mot2passe?",
   });
 });
 
@@ -77,7 +77,7 @@ describe("Scénario création de partie -> ajout de joueurs -> lancement", () =>
       let repLogin = await request
         .post("/api/users/login")
         .set("Content-Type", "application/json")
-        .send({ name: "player1", password: "player1" });
+        .send({ name: "player1", password: "Mot2passe?" });
       expect(repLogin.statusCode).toBe(200);
       expect(repLogin.body.message).toBe("User logged in");
       expect(repLogin.body).toHaveProperty("token");
@@ -92,7 +92,7 @@ describe("Scénario création de partie -> ajout de joueurs -> lancement", () =>
       repLogin = await request
         .post("/api/users/login")
         .set("Content-Type", "application/json")
-        .send({ name: "player2", password: "player2" });
+        .send({ name: "player2", password: "Mot2passe?" });
       expect(repLogin.statusCode).toBe(200);
       expect(repLogin.body.message).toBe("User logged in");
       expect(repLogin.body).toHaveProperty("token");
@@ -107,7 +107,7 @@ describe("Scénario création de partie -> ajout de joueurs -> lancement", () =>
       repLogin = await request
         .post("/api/users/login")
         .set("Content-Type", "application/json")
-        .send({ name: "player3", password: "player3" });
+        .send({ name: "player3", password: "Mot2passe?" });
       expect(repLogin.statusCode).toBe(200);
       expect(repLogin.body.message).toBe("User logged in");
       expect(repLogin.body).toHaveProperty("token");
@@ -122,7 +122,7 @@ describe("Scénario création de partie -> ajout de joueurs -> lancement", () =>
       repLogin = await request
         .post("/api/users/login")
         .set("Content-Type", "application/json")
-        .send({ name: "player4", password: "player4" });
+        .send({ name: "player4", password: "Mot2passe?" });
       expect(repLogin.statusCode).toBe(200);
       expect(repLogin.body.message).toBe("User logged in");
       expect(repLogin.body).toHaveProperty("token");
@@ -138,7 +138,7 @@ describe("Scénario création de partie -> ajout de joueurs -> lancement", () =>
       repLogin = await request
         .post("/api/users/login")
         .set("Content-Type", "application/json")
-        .send({ name: "usertwo", password: "usertwo" });
+        .send({ name: "usertwo", password: "Mot2passe?" });
       expect(repLogin.statusCode).toBe(200);
       expect(repLogin.body.message).toBe("User logged in");
       expect(repLogin.body).toHaveProperty("token");
@@ -178,7 +178,7 @@ afterAll(async () => {
   let repLogin = await request
     .post("/api/users/login")
     .set("Content-Type", "application/json")
-    .send({ name: "player1", password: "player1" });
+    .send({ name: "player1", password: "Mot2passe?" });
   expect(repLogin.statusCode).toBe(200);
   expect(repLogin.body.message).toBe("User logged in");
   expect(repLogin.body).toHaveProperty("token");
@@ -193,7 +193,7 @@ afterAll(async () => {
   repLogin = await request
     .post("/api/users/login")
     .set("Content-Type", "application/json")
-    .send({ name: "player2", password: "player2" });
+    .send({ name: "player2", password: "Mot2passe?" });
   expect(repLogin.statusCode).toBe(200);
   expect(repLogin.body.message).toBe("User logged in");
   expect(repLogin.body).toHaveProperty("token");
@@ -208,7 +208,7 @@ afterAll(async () => {
   repLogin = await request
     .post("/api/users/login")
     .set("Content-Type", "application/json")
-    .send({ name: "player3", password: "player3" });
+    .send({ name: "player3", password: "Mot2passe?" });
   expect(repLogin.statusCode).toBe(200);
   expect(repLogin.body.message).toBe("User logged in");
   expect(repLogin.body).toHaveProperty("token");
@@ -223,7 +223,7 @@ afterAll(async () => {
   repLogin = await request
     .post("/api/users/login")
     .set("Content-Type", "application/json")
-    .send({ name: "player4", password: "player4" });
+    .send({ name: "player4", password: "Mot2passe?" });
   expect(repLogin.statusCode).toBe(200);
   expect(repLogin.body.message).toBe("User logged in");
   expect(repLogin.body).toHaveProperty("token");

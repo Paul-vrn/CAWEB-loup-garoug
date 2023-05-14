@@ -61,9 +61,6 @@ export const ListGamesLobby: React.FC<ListProps> = ({ search }) => {
         // si web le scrollview intégré à list marche pas donc on bidouille un scrollview + reload button
         Platform.OS === "web" ? (
           <ScrollView>
-            <Button onPress={() => refetch()}>
-              <AntDesign name="reload1" size={10} color="black" />
-            </Button>
             <List
               nestedScrollEnabled
               data={filteredGames}
@@ -72,6 +69,9 @@ export const ListGamesLobby: React.FC<ListProps> = ({ search }) => {
               onRefresh={refetch}
               refreshing={isLoading}
             />
+            <Button onPress={() => refetch()}>
+              <AntDesign name="reload1" size={10} color="black" />
+            </Button>
           </ScrollView>
         ) : (
           <List
@@ -89,8 +89,8 @@ export const ListGamesLobby: React.FC<ListProps> = ({ search }) => {
         </Button>
       )}
       <ModalConfirmChoice
-        title="Validation"
-        description="Êtes vous sur de rejoindre cette partie ?"
+        title="Join game"
+        description="Do you want to join this game ?"
         visible={visible}
         setVisible={setVisible}
         confirmFunction={() => {
@@ -151,9 +151,6 @@ export const ListMyGames: React.FC<ListProps> = ({ search }) => {
         // si web le scrollview intégré à list marche pas donc on bidouille un scrollview + reload button
         Platform.OS === "web" ? (
           <ScrollView>
-            <Button onPress={() => refetch()}>
-              <AntDesign name="reload1" size={10} color="black" />
-            </Button>
             <List
               nestedScrollEnabled
               data={filteredGames}
@@ -162,6 +159,9 @@ export const ListMyGames: React.FC<ListProps> = ({ search }) => {
               onRefresh={refetch}
               refreshing={isLoading}
             />
+            <Button onPress={() => refetch()}>
+              <AntDesign name="reload1" size={10} color="black" />
+            </Button>
           </ScrollView>
         ) : (
           <List
@@ -182,8 +182,8 @@ export const ListMyGames: React.FC<ListProps> = ({ search }) => {
         </View>
       )}
       <ModalConfirmChoice
-        title="Validation"
-        description="Êtes vous sur de rejoindre cette partie ?"
+        title="Leave game"
+        description="Are you sure you want to leave the game ?"
         visible={visible}
         setVisible={setVisible}
         confirmFunction={() => {

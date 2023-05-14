@@ -8,7 +8,9 @@ import { IP, PORT } from "./utils/env";
 app.use(cors());
 relaunchGames();
 
-const serv = app.listen(PORT, () => console.log(`Listening on http://${IP}:${PORT}`));
+const serv = app.listen(PORT, () => {
+  console.log(`Listening on http://${IP}:${PORT}`);
+});
 
 // Websocket server
 const io = new Server(serv, {

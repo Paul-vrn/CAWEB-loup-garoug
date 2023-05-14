@@ -4,6 +4,16 @@ import { Request, Response } from "express";
 import prisma from "../prisma";
 import { SECRET } from "../utils/env";
 const jwt = require("jsonwebtoken");
+const validatePassword = (password: string) => {
+  const passwordRegex: RegExp =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,255}$/;
+  return passwordRegex.test(password);
+};
+const validateUsername = (name: string) => {
+  const nameRegex: RegExp = /^(?=.*[a-zA-Z])[A-Za-z\d_-]{5,20}$/;
+  return nameRegex.test(name);
+};
+
 const userController = {
   async create(req: Request, res: Response) {
     // #swagger.tags = ['User']
@@ -12,6 +22,21 @@ const userController = {
     const { name, password } = req.body;
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
+
+    if (!validateUsername(name)) {
+      return res.status(400).json({
+        message:
+          "Username must only contain letters, digits, -, _ and be between 5 and 20 characters long, with at least one letter",
+      });
+    }
+
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message:
+          "Password must contain: 1 uppercase, 1 lowercase letter, 1 digit, 1 special character and be between 8 and 255 characters logn",
+      });
+    }
+
     try {
       const user = await prisma.user.create({
         data: {
@@ -52,6 +77,21 @@ const userController = {
     const id = decodedToken.id;
 
     const { name, password } = req.body;
+
+    if (!validateUsername(name)) {
+      return res.status(400).json({
+        message:
+          "Username must only contain letters, digits, -, _ and be between 5 and 20 characters long, with at least one letter",
+      });
+    }
+
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message:
+          "Password must contain: 1 uppercase, 1 lowercase letter, 1 digit, 1 special character and be between 8 and 255 characters logn",
+      });
+    }
+
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
     prisma.user

@@ -4,7 +4,7 @@ import { Stack, useRouter, useSearchParams } from "expo-router";
 import { useContext, useState } from "react";
 import React, { Image, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Game, Player, Power, Role, StateGame } from "types";
+import { Game, Player, Power, Role, StateGame, StatePlayer } from "types";
 import { AuthContext } from "../../../components/context/tokenContext";
 import Loading from "../../../components/loading";
 import { getPermissions } from "../../../utils/api/chat";
@@ -23,6 +23,7 @@ import dayIcon from "../../../../assets/UI/day.png";
 import deadIcon from "../../../../assets/UI/dead.png";
 import nightIcon from "../../../../assets/UI/night.png";
 import ModalPlayers from "../../../components/modals/modalPlayers";
+import End from "./end";
 
 const powerIcons = {
   INSOMNIAC: eyeIcon,
@@ -118,6 +119,9 @@ const GameView = () => {
   const handleSeePlayer = () => {
     setModalVisible(true);
   };
+  if (game.state === StateGame.END) {
+    return <End />;
+  }
   return (
     <ScrollView>
       <Stack.Screen options={{ title: game.name, headerRight: () => null }} />
@@ -158,9 +162,33 @@ const GameView = () => {
         <View style={styles.mainWrapper}>
           <Text style={styles.h2}>What to do?</Text>
           <View style={styles.wrapper}>
-            <Button onPress={redirectVote} style={styles.button} disabled={!game.curElecId}>
+            <Button
+              onPress={redirectVote}
+              disabled={
+                !game.curElecId ||
+                (game.state === StateGame.NIGHT && player.role !== Role.WOLF) ||
+                player.state === StatePlayer.DEAD
+              }
+              style={
+                !game.curElecId ||
+                (game.state === StateGame.NIGHT && player.role !== Role.WOLF) ||
+                player.state === StatePlayer.DEAD
+                  ? [styles.button, styles.disabledButton]
+                  : styles.button
+              }
+            >
               {evaProps => (
-                <Text {...evaProps} style={styles.buttonText}>
+                // style depending on disabled or not
+                <Text
+                  {...evaProps}
+                  style={
+                    !game.curElecId ||
+                    (game.state === StateGame.NIGHT && player.role !== Role.WOLF) ||
+                    player.state === StatePlayer.DEAD
+                      ? [styles.buttonText, styles.disabledButtonText]
+                      : styles.buttonText
+                  }
+                >
                   Vote
                 </Text>
               )}
@@ -325,8 +353,10 @@ export const styles = StyleSheet.create({
     boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.15)",
   },
   disabledButton: {
-    backgroundColor: "#ceccbd",
-    opacity: 0.8,
+    backgroundColor: "#2c2b2b",
+    borderColor: "#C38100",
+    borderWidth: 1,
+    opacity: 0.9,
   },
   buttonText: {
     fontSize: 15,
@@ -334,7 +364,7 @@ export const styles = StyleSheet.create({
     fontFamily: "MontserratBold",
   },
   disabledButtonText: {
-    color: "#141313",
+    color: "#6b4c0c",
   },
   icon: {
     width: 20,

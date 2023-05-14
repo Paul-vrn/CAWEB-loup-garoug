@@ -1,11 +1,11 @@
 describe("Authentification", () => {
   const newUser = {
     name: "newuser",
-    password: "newpass",
+    password: "Mot2passe?1",
   };
   const updateUser = {
     name: "updateuser",
-    password: "updatepass",
+    password: "Mot2passe?2",
   };
 
   beforeEach(() => {
@@ -93,8 +93,9 @@ describe("Authentification", () => {
       cy.get('[data-testid="@update-password-input/input"]').type(updateUser.password);
       cy.get('[data-testid="@confirm-update-password-input/input"]').type(updateUser.password);
       cy.get('[data-testid="update-account-button"]').click();
-      cy.wait("@updateUser");
-      // Additional assertions if needed
+      cy.get('[data-testid="modal-confirm"]').as("modal");
+      cy.get("@modal").should("be.visible");
+      cy.get("@modal").click();
     });
   });
 
@@ -110,8 +111,9 @@ describe("Authentification", () => {
       cy.get('[data-testid="settings-button"]').click();
       cy.url().should("equal", "http://localhost:19000/user");
       cy.get('[data-testid="delete-account-button"]').click();
-      cy.wait("@deleteUser");
-      // Additional assertions if needed
+      cy.get('[data-testid="modal-confirm"]').as("modal");
+      cy.get("@modal").should("be.visible");
+      cy.get("@modal").click();
     });
   });
 });
