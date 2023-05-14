@@ -71,12 +71,6 @@ test-backend:
     paths:
       - apps/api/coverage/
 
-build:
-  stage: build
-  script:
-    - pnpm build # build le backend et le client prisma dans apps/api/dist
-  when: always
-
 #test-frontend:
 #  image: cypress/base:16.18.1
 #  services:
