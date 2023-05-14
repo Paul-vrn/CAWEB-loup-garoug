@@ -16,7 +16,7 @@
     "type-check": "tsc",
     "scalingo-postbuild": "npx prisma migrate deploy --schema=./dist/schema.prisa && npm run build",
     "scalingo:build": "npm run build",
-    "scalingo:start": "npm run doc && npm run start"
+    "scalingo:start": "npm run doc && npm run dev"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
