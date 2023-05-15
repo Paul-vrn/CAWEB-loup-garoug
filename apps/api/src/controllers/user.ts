@@ -60,13 +60,6 @@ const userController = {
       return res.status(400).json({ message: "Name already exists" });
     }
   },
-  async getAll(req: Request, res: Response) {
-    // #swagger.tags = ['User']
-    // #swagger.summary = 'Create user'
-    // #swagger.security = [{'bearerAuth': [] }]
-    const users = await prisma.user.findMany();
-    res.json(users);
-  },
   async update(req: Request, res: Response) {
     // #swagger.tags = ['User']
     // #swagger.summary = 'Update user'

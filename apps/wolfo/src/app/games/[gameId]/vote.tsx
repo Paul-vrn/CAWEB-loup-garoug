@@ -187,6 +187,27 @@ const Vote = () => {
     router.back();
     return;
   }
+  const renderItem = ({ item: player, index: i } : {item: Player, index: number}) => {
+    if (
+      currentPlayer.userId !== player.userId &&
+      (game.state === StateGame.DAY ||
+        (currentPlayer.role === Role.WOLF && player.role !== Role.WOLF))
+    ) {
+      return (
+        <Choice
+          key={player.userId}
+          choicePlayer={player}
+          currentPlayer={currentPlayer as Player}
+          nbVotes={votes[i].length}
+          electionId={game?.curElecId!}
+          currentVote={currentVote}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.background}>
       <Stack.Screen
@@ -207,28 +228,9 @@ const Vote = () => {
       )}
       <View style={styles.mainView}>
         <FlatList
-          ItemSeparatorComponent={() => <></>}
+          ItemSeparatorComponent={() => <View style={styles.separator}/>}
           data={game?.players}
-          renderItem={({ item: player, index: i }) => {
-            if (
-              currentPlayer.userId !== player.userId &&
-              (game.state === StateGame.DAY ||
-                (currentPlayer.role === Role.WOLF && player.role !== Role.WOLF))
-            ) {
-              return (
-                <Choice
-                  key={player.userId}
-                  choicePlayer={player}
-                  currentPlayer={currentPlayer as Player}
-                  nbVotes={votes[i].length}
-                  electionId={game?.curElecId!}
-                  currentVote={currentVote}
-                />
-              );
-            } else {
-              return null;
-            }
-          }}
+          renderItem={renderItem}
           keyExtractor={player => player.userId}
         />
       </View>
@@ -244,6 +246,13 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: "10%",
     marginBottom: 40,
+  },
+  separator: {
+    position: "relative",
+    borderColor: "#C38100",
+    height: 0,
+    borderBottomWidth: 1,
+    width: "100%",
   },
   line: {
     position: "relative",
@@ -278,6 +287,7 @@ const styles = StyleSheet.create({
     position: "relative",
     borderWidth: 2,
     flexGrow: 1,
+    flexShrink: 1,
     display: "flex",
     width: "80%",
     left: "10%",
@@ -307,15 +317,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flexWrap: "nowrap",
-    paddingRight: 10,
-    borderTopWidth: 2,
-    borderBottomWidth: 2,
-    borderColor: "transparent",
-    borderStyle: "solid",
-    borderBottomColor: "#C38100",
-    borderTopColor: "#C38100",
+    paddingRight: 30,
+    // borderTopWidth: 2,
+    // borderBottomWidth: 2,
+    // borderColor: "transparent",
+    // borderStyle: "solid",
+    // borderBottomColor: "#C38100",
+    // borderTopColor: "#C38100",
     overflow: "visible",
     // borderRadius: 25,
+    gap: 30,
   },
   buttonConfirm: {
     // borderRadius: 25,

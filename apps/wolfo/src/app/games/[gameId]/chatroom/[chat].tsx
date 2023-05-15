@@ -13,6 +13,7 @@ import { getGame } from "../../../../utils/api/game";
 import { getPlayer } from "../../../../utils/api/player";
 import useFont from "../../../../utils/hooks/useFont";
 
+// à changer en fonction du dev + changer le port de scalingo car il change à chaque déploiement
 //const socketEndpoint = `http://localhost:3000`;
 const socketEndpoint = "https://wolfo-backend.osc-fr1.scalingo.io:22769";
 

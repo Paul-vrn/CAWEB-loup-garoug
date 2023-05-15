@@ -1,6 +1,6 @@
 import { StateGame } from "database";
 import { Request, Response } from "express";
-import { Game, NewGame } from "types";
+import { NewGame } from "types";
 import prisma from "../prisma";
 import createGame from "../services/game/createGame";
 import { JobType, deleteJob } from "../services/scheduler";
@@ -17,6 +17,11 @@ const gameController = {
     const token = req.headers.authorization?.split(" ")[1];
     const decodedToken = jwt.verify(token, SECRET);
     const userId = decodedToken.id;
+
+    if (game.name.length > 130) {
+      // #swagger.responses[400] = { description: "Name too long", schema: { $message: "Name too long" } }
+      return res.status(400).json({ message: "Name too long" });
+    }
     createGame(game, userId)
       .then(newGame => {
         // #swagger.responses[201] = { description: "Game created", schema: { $game: { $ref: "#/definitions/Game" } } }
@@ -236,25 +241,6 @@ const gameController = {
         res.status(400).json(error);
       });
   },
-  update(req: Request, res: Response) {
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "Invalid id" });
-    }
-    const game: Game = req.body;
-    prisma.game
-      .update({
-        where: { id },
-        data: game,
-      })
-      .then(gameUpdated => {
-        res.status(201).json(gameUpdated);
-      })
-      .catch(error => {
-        console.log(error);
-        res.status(400).json(error);
-      });
-  },
   start(req: Request, res: Response) {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
@@ -270,46 +256,6 @@ const gameController = {
       .then(gameUpdated => {
         deleteJob(gameUpdated.id, JobType.DEADLINE);
         res.status(201).json(gameUpdated);
-      })
-      .catch(error => {
-        console.log(error);
-        res.status(400).json(error);
-      });
-  },
-  delete(req: Request, res: Response) {
-    // #swagger.tags = ['Game']
-    // #swagger.summary = 'Delete a game'
-    // #swagger.security = [{'bearerAuth': [] }]
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "Invalid id" });
-    }
-    prisma
-      .$transaction(async transaction => {
-        const game = await transaction.game.findUnique({
-          where: { id },
-          select: {
-            id: true,
-            dayChatRoomId: true,
-            nightChatRoomId: true,
-          },
-        });
-        if (!game) {
-          throw new Error("Game not found");
-        }
-        await transaction.game.delete({
-          where: { id: game.id },
-        });
-        await transaction.chatRoom.delete({
-          where: { id: game.dayChatRoomId },
-        });
-        await transaction.chatRoom.delete({
-          where: { id: game.nightChatRoomId },
-        });
-        return game;
-      })
-      .then(game => {
-        res.status(201).json(`La game ${game.id} a été supprimé`);
       })
       .catch(error => {
         console.log(error);

@@ -112,10 +112,6 @@ const startGame = async (gameId: number) => {
         if (spirit.power === Power.NONE) {
           spirit.power = Power.SPIRIT;
           isSpirit = false;
-          await prisma.game.update({
-            where: { id: gameId },
-            data: { spiritChat: { create: {} } },
-          });
         }
       }
       const playersUpdateTransaction = players.map(player => {

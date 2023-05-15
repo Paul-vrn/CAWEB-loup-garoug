@@ -128,7 +128,10 @@ const GameView = () => {
       <Stack.Screen options={{ title: game.name, headerRight: () => null }} />
       <SafeAreaView style={styles.container}>
         <View style={styles.wrapper}>
-          <Text style={styles.title}>{game.name}</Text>
+          <View style={styles.line}>
+            <Text>{""}</Text>
+          </View>
+          <Text style={[styles.title, styles.h2]}>{game.name}</Text>
         </View>
         <View style={styles.wrapperTitle}>
           <Image
@@ -280,12 +283,29 @@ export const styles = StyleSheet.create({
     backgroundColor: "#141313",
     paddingBottom: 25,
   },
+  // wrapper: {
+  //   flexDirection: "row",
+  //   justifyContent: "space-around",
+  //   alignItems: "center",
+  //   width: "100%",
+  //   marginVertical: 10,
+  // },
   wrapper: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginVertical: 10,
+    marginTop: "5%",
+    marginBottom: 40,
+  },
+  line: {
+    position: "relative",
+    borderColor: "#C38100",
+    height: 0,
+    borderBottomWidth: 2,
+    width: "80%",
+    zIndex: -1,
   },
   mainWrapper: {
     display: "flex",
@@ -336,8 +356,10 @@ export const styles = StyleSheet.create({
     fontFamily: "Voyage",
     fontSize: 37,
     color: "#C38100",
-    marginTop: -40,
+    marginTop: -28,
     marginBottom: 25,
+    paddingHorizontal: 10,
+    zIndex: 1,
   },
   smallText: {
     fontSize: 14,

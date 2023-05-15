@@ -18,14 +18,6 @@ const gameApi = {
     const { data } = await api.post("/games", game);
     return data;
   },
-  deleteGame: async (id: number) => {
-    const { data } = await api.delete(`/games/${id}`);
-    return data;
-  },
-  updateGame: async (id: number, game: Game) => {
-    const { data } = await api.put(`/games/${id}`, game);
-    return data;
-  },
   joinGame: async (id: number) => {
     const { data } = await api.post(`/games/${id}/join`);
     return data;
@@ -40,14 +32,5 @@ const gameApi = {
   },
 };
 
-export const {
-  getGamesLobby,
-  getMyGames,
-  getGame,
-  createGame,
-  deleteGame,
-  updateGame,
-  joinGame,
-  leaveGame,
-  login,
-} = gameApi;
+export const { getGamesLobby, getMyGames, getGame, createGame, joinGame, leaveGame, login } =
+  gameApi;

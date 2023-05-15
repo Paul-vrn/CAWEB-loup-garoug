@@ -242,7 +242,7 @@ const NewGame = () => {
               <Input
                 style={styles.timeButton}
                 onChangeText={text => setDeadline(new Date(text))}
-                placeholder="MM-DD-YYYY"
+                placeholder="MM/DD/YYYY"
                 testID="start-date-input"
               />
             ) : (

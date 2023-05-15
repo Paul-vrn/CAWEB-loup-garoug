@@ -44,6 +44,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [name, setName] = useState<string>("");
   const [id, setId] = useState<string>("");
 
+  // fonction qui est trigger sur toutes les routes et qui permet de vérifier si l'utilisateur est connecté
   const useProtectedRoute = (tok: string | null) => {
     const segments = useSegments();
     const router = useRouter();
@@ -51,24 +52,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     React.useEffect(() => {
       const inAuthGroup = segments[0] === "(auth)";
       if (
-        // If the user is not signed in and the initial segment is not anything in the auth group.
+        // Si l'utilisateur n'est pas connecté et que le segment initial n'est pas dans le groupe d'authentification.
         !tok &&
         !inAuthGroup
       ) {
+        // On va chercher le token depuis le storage.
         tokenFromStorage().then(t => {
+          // si le token est null, on redirige vers la page d'authentification
           if (!t) {
             // Redirect to the sign-in page.
             router.replace("/auth");
           } else {
-            // Redirect away from the sign-in page.
+            // sinon on set le token dans le contexte et on le set dans l'api
             setTokenApi(t);
             handleSetToken(t);
-            // on reset la route parce qu'au reload le router a été perdu donc les boutons "back" ne fonctionnent plus
+            // on reset la route à la racine parce que quand on reload,
+            // ça refresh useRouter et ça bug les boutons "back"
             router.replace("/");
           }
         });
       } else if (tok && inAuthGroup) {
-        // Redirect away from the sign-in page.
+        // redirect to the home page
         router.replace("/");
       }
     }, [tok, router, segments]);
