@@ -49,3 +49,8 @@ export const checkDeadline = (date: Date, startDay: Date): boolean => {
     return date > new Date();
   }
 };
+
+export const addOffset = (hour: number, offset: number): number => {
+  const newHour = hour + offset;
+  return newHour > 23 ? newHour - 24 : newHour < 0 ? newHour + 24 : newHour;
+};

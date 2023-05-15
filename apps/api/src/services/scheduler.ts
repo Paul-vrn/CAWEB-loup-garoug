@@ -4,7 +4,7 @@ import prisma from "../prisma";
 import { UTC_OFFSET } from "../utils/env";
 import newPeriod from "./game/newPeriod";
 import startGame from "./game/startGame";
-import { checkDeadline } from "./time";
+import { addOffset, checkDeadline } from "./time";
 interface deadlineJobMap {
   [key: number]: cron.ScheduledTask;
 }
@@ -52,9 +52,10 @@ export const createDeadlineJob = (deadline: Date, gameId: number, startDay: Date
     deadlineJobs[gameId].stop();
     delete deadlineJobs[gameId];
   }
-  const dateString = `${start.getUTCSeconds()} ${start.getUTCMinutes()} ${
-    start.getUTCHours() + Number(UTC_OFFSET)
-  } ${date.getUTCDate()} ${date.getUTCMonth() + 1} *`;
+  const dateString = `${start.getUTCSeconds()} ${start.getUTCMinutes()} ${addOffset(
+    start.getUTCHours(),
+    Number(UTC_OFFSET)
+  )} ${date.getUTCDate()} ${date.getUTCMonth() + 1} *`;
   console.log("cron at ", dateString);
   const job = cron.schedule(dateString, async () => startGame(gameId));
   deadlineJobs[gameId] = job;
@@ -63,13 +64,19 @@ export const createDeadlineJob = (deadline: Date, gameId: number, startDay: Date
 
 export const createNewDayJob = async (startDay: Date, gameId: number) => {
   const date = new Date(startDay);
-  const cronDate = `${date.getUTCMinutes()} ${date.getUTCHours() + Number(UTC_OFFSET)} * * *`;
+  const cronDate = `${date.getUTCMinutes()} ${addOffset(
+    date.getUTCHours(),
+    Number(UTC_OFFSET)
+  )} * * *`;
   cron.schedule(cronDate, () => newPeriod(true, gameId));
 };
 
 export const createNewNightJob = (endDay: Date, gameId: number) => {
   const date = new Date(endDay);
-  const cronDate = `${date.getUTCMinutes()} ${date.getUTCHours() + Number(UTC_OFFSET)} * * *`;
+  const cronDate = `${date.getUTCMinutes()} ${addOffset(
+    date.getUTCHours(),
+    Number(UTC_OFFSET)
+  )} * * *`;
   cron.schedule(cronDate, () => newPeriod(false, gameId));
 };
 // Fonction qui relance les parties en attente de joueurs dans le cas
