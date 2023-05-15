@@ -10,7 +10,7 @@
     "lint": "eslint src",
     "lint:fix": "pnpm lint --fix",
     "doc": "tsx src/utils/swagger.ts",
-    "test": "jest --coverage --detectOpenHandles --forceExit",
+    "test:backend": "jest --coverage --detectOpenHandles --forceExit",
     "test:watch": "jest --watch",
     "clean": "git clean -xdf .expo .turbo node_modules",
     "type-check": "tsc",

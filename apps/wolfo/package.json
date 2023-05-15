@@ -14,8 +14,8 @@
     "type-check": "tsc --noEmit",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test": "start-test web 19000 cy:open",
-    "test:ci": "start-test web 19000 cy:run"
+    "test:frontend": "start-test web 19000 cy:open",
+    "test:frontend:ci": "start-test web 19000 cy:run"
   },
   "dependencies": {
     "@eva-design/eva": "^2.2.0",

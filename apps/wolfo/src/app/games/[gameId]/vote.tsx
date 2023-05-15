@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Stack, useRouter, useSearchParams } from "expo-router";
 import React, { useContext, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Game, Player, Role, StateGame, StatePlayer, Vote as VoteType } from "types";
 import { AuthContext } from "../../../components/context/tokenContext";
@@ -181,7 +181,6 @@ const Vote = () => {
     !currentPlayer
   ) {
     console.log(game);
-    console.log(isErrorVote);
     return <Text>An error occured. Please try again in a little</Text>;
   }
   if (!game.curElecId) {
@@ -196,23 +195,27 @@ const Vote = () => {
           headerRight: () => null,
         }}
       />
-      <ScrollView>
-        {game.state === StateGame.NIGHT && currentPlayer.role !== Role.WOLF ? (
-          <Text style={[styles.text, styles.title]}>
-            Can't vote at night. Come back in the morning!
-          </Text>
-        ) : (
-          <View style={styles.wrapperTitle}>
-            <View style={styles.line} />
-            <Text style={styles.h2}>Vote</Text>
-          </View>
-        )}
-        <View style={styles.mainView}>
-          {game?.players.map(
-            (player: Player, i: number) =>
+      {game.state === StateGame.NIGHT && currentPlayer.role !== Role.WOLF ? (
+        <Text style={[styles.text, styles.title]}>
+          Can't vote at night. Come back in the morning!
+        </Text>
+      ) : (
+        <View style={styles.wrapperTitle}>
+          <View style={styles.line} />
+          <Text style={styles.h2}>Vote</Text>
+        </View>
+      )}
+      <View style={styles.mainView}>
+        <FlatList
+          ItemSeparatorComponent={() => <></>}
+          data={game?.players}
+          renderItem={({ item: player, index: i }) => {
+            if (
               currentPlayer.userId !== player.userId &&
               (game.state === StateGame.DAY ||
-                (currentPlayer.role === Role.WOLF && player.role !== Role.WOLF)) && (
+                (currentPlayer.role === Role.WOLF && player.role !== Role.WOLF))
+            ) {
+              return (
                 <Choice
                   key={player.userId}
                   choicePlayer={player}
@@ -221,10 +224,14 @@ const Vote = () => {
                   electionId={game?.curElecId!}
                   currentVote={currentVote}
                 />
-              )
-          )}
-        </View>
-      </ScrollView>
+              );
+            } else {
+              return null;
+            }
+          }}
+          keyExtractor={player => player.userId}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -261,22 +268,21 @@ const styles = StyleSheet.create({
   background: {
     display: "flex",
     backgroundColor: "#141313",
-    flex: 1,
+    flexGrow: 1,
   },
   mainView: {
-    marginTop: "5%",
-    marginBottom: "10%",
-    flexDirection: "column",
-    justifyContent: "center",
+    // marginTop: "40%",
+    marginBottom: "50%",
+    // flexDirection: "column",
+    justifyContent: "flex-start",
     position: "relative",
     borderWidth: 2,
+    flexGrow: 1,
     display: "flex",
-    flex: 1,
     width: "80%",
     left: "10%",
-    borderBottomWidth: 0,
     borderColor: "#C38100",
-    backgroundColor: "#141313",
+    overflow: "hidden",
   },
   text: {
     color: "#C38100",
@@ -301,13 +307,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flexWrap: "nowrap",
-    paddingRight: 30,
-    // width: "80%",
+    paddingRight: 10,
+    borderTopWidth: 2,
     borderBottomWidth: 2,
     borderColor: "transparent",
     borderStyle: "solid",
     borderBottomColor: "#C38100",
-    overflow: "hidden",
+    borderTopColor: "#C38100",
+    overflow: "visible",
     // borderRadius: 25,
   },
   buttonConfirm: {
@@ -325,13 +332,13 @@ const styles = StyleSheet.create({
     color: "#C38100",
   },
   buttonContent: {
+    paddingVertical: 8,
+    paddingHorizontal: 15,
     position: "relative",
     display: "flex",
     justifyContent: "center",
     backgroundColor: "#C38100",
     borderRadius: 20,
-    width: "15%",
-    height: "50%",
   },
   buttonText: {
     color: "#141313",
@@ -339,7 +346,6 @@ const styles = StyleSheet.create({
   buttonView: {
     flexGrow: 1,
     borderStyle: "solid",
-    padding: 10,
     borderColor: "#C38100",
     borderTopColor: "transparent",
     position: "relative",
@@ -357,14 +363,6 @@ const styles = StyleSheet.create({
     // textDecorationLine: "underline",
     // textDecorationColor: "#C38100",
     fontStyle: "italic",
-  },
-  voteCount: {
-    borderColor: "transparent",
-    height: "100%",
-    aspectRatio: 1,
-    display: "flex",
-    justifyContent: "center",
-    textAlign: "center",
   },
 });
 

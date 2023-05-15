@@ -13,8 +13,8 @@ import { getGame } from "../../../../utils/api/game";
 import { getPlayer } from "../../../../utils/api/player";
 import useFont from "../../../../utils/hooks/useFont";
 
-const socketEndpoint = `http://localhost:3000`;
-//const socketEndpoint = "https://wolfo-backend.osc-fr1.scalingo.io:22769";
+//const socketEndpoint = `http://localhost:3000`;
+const socketEndpoint = "https://wolfo-backend.osc-fr1.scalingo.io:22769";
 
 const ChatRoomView = () => {
   //console.log(usePathname());

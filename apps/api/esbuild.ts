@@ -1,5 +1,10 @@
 import esbuild from "esbuild";
 import fs from "fs-extra";
+
+// swagger-ui-express est mal foutu du coup le bundler arrive pas à trouver les fichiers
+// donc on les copie dans le dossier dist
+
+
 fs.copy("../../node_modules/swagger-ui-dist", "dist", err => {
   if (err) {
     console.error("Une erreur est survenue lors de la copie des fichiers :", err);

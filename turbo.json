@@ -8,7 +8,7 @@
     },
     "doc": {},
     "dev": {
-      "dependsOn": ["^db:generate", "doc"],
+      "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true
     },
@@ -26,10 +26,12 @@
     "clean": {
       "cache": false
     },
-    "test": {
+    "test:backend": {
       "dependsOn": ["^db:generate"],
       "inputs": ["src/**", "test/**"]
     },
+    "test:frontend": {},
+    "test:frontend:ci": {},
     "test:watch": {
       "cache": false
     },
