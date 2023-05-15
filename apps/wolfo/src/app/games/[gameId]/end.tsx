@@ -23,7 +23,6 @@ const End = () => {
   const { token } = useContext(AuthContext);
   const { id: userId } = useContext(AuthContext);
 
-  console.log("TOKEN " + userId);
   const {
     data: game,
     isLoading,
@@ -43,7 +42,6 @@ const End = () => {
     queryKey: ["player", userId],
     queryFn: () => getPlayer(game?.id!, Array.isArray(userId) ? userId[0] : userId!),
   });
-  console.log(isLoadingPlayer);
   if (isLoading || isLoadingPlayer) {
     return <Loading title="Vote Loading" message={"Loading..."} />;
   }
@@ -94,18 +92,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   frame: {
-    marginTop: 100,
     position: "relative",
     width: "80%",
-    border: "1px solid orange",
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "#C38100",
     paddingBottom: 35,
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   image: {
     margin: "auto",
     resizeMode: "contain",
-    width: "65%",
+    width: 350,
+    height: 350,
     aspectRatio: 1,
   },
   text: {
@@ -115,14 +115,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   title: {
+    alignSelf: "center",
+    position: "relative",
     backgroundColor: "#141313",
     fontFamily: "Voyage",
     fontSize: 37,
     color: "#C38100",
-    marginTop: -30,
+    marginTop: -26,
+    paddingHorizontal: 15,
     textAlign: "center",
+    marginBottom: 10,
     marginHorizontal: "auto",
-    marginBottom: 25,
   },
 });
 export default End;
