@@ -145,26 +145,6 @@ describe("Scénario création de partie -> ajout de joueurs -> lancement", () =>
       token = repLogin.body.token;
     });
   });
-
-  describe("Lancement puis suppression de la game", () => {
-    test("startGame then delete /api/games/:id", async () => {
-      //
-      //  // On lance la partie qui est pleine
-      //  await startGame(gameId);
-      //  const repGetGame = await request
-      //  .get(`/api/games/${gameId}`)
-      //  .set("Authorization", `Bearer ${token}`)
-      //  .set("Content-Type", "application/json");
-      //  expect(repGetGame.body.players.length).toBe(5);
-      //  console.log(repGetGame.body.players);
-      //  console.log(repGetGame.body);
-      //on supprime la game
-      await request
-        .delete(`/api/games/${gameId}/delete`)
-        .set("Authorization", `Bearer ${token}`)
-        .set("Content-Type", "application/json");
-    });
-  });
 });
 
 afterAll(async () => {

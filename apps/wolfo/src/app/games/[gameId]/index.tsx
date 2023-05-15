@@ -37,7 +37,6 @@ const GameView = () => {
   const router = useRouter();
   const { gameId } = useSearchParams(); // idGame
   const { id: userId } = useContext(AuthContext);
-
   const fontsLoaded = useFont();
 
   const [modalVisible, setModalVisible] = useState(false); // Etat pour contrôler l'affichage du modal
@@ -63,7 +62,8 @@ const GameView = () => {
     enabled: Boolean(game),
     queryKey: ["player", userId],
     queryFn: () => getPlayer(game?.id!, userId),
-    staleTime: 1000 * 60 * 5,
+    cacheTime: 0,
+    refetchInterval: 200,
   });
 
   // get permissions
@@ -100,7 +100,10 @@ const GameView = () => {
         router.push({ pathname: `/games/${gameId}/power/spirit`, params: { userId } });
         break;
       case Power.INSOMNIAC:
-        router.push({ pathname: `/games/${gameId}/power/insomniac`, params: { userId } });
+        router.push({
+          pathname: `/games/${gameId}/chatroom/${game.nightChatRoomId}`,
+          params: { userId },
+        });
         break;
       case Power.CONTAMINATOR:
         router.push({

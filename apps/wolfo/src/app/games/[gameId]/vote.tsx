@@ -187,7 +187,7 @@ const Vote = () => {
     router.back();
     return;
   }
-  const renderItem = ({ item: player, index: i } : {item: Player, index: number}) => {
+  const renderItem = ({ item: player, index: i }: { item: Player; index: number }) => {
     if (
       currentPlayer.userId !== player.userId &&
       (game.state === StateGame.DAY ||
@@ -228,7 +228,7 @@ const Vote = () => {
       )}
       <View style={styles.mainView}>
         <FlatList
-          ItemSeparatorComponent={() => <View style={styles.separator}/>}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
           data={game?.players}
           renderItem={renderItem}
           keyExtractor={player => player.userId}

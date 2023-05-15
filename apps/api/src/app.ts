@@ -3,8 +3,8 @@ import cors from "cors";
 import express, { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import router from "./routes/router";
+import { PORT } from "./utils/env";
 import logger from "./utils/logger";
-
 const app = express();
 
 // Configure Express App Instance
@@ -24,6 +24,10 @@ import swaggerUi from "swagger-ui-express";
 import swaggerFile from "../swagger_output.json";
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
+// pour accéder au port dynamique de scalingo depuis le frontend
+app.get("/port", (req, res) => {
+  res.json({ port: PORT });
+});
 // This middleware adds the json header to every response
 app.use("*", (req, res, next) => {
   res.setHeader("Content-Type", "application/json");
