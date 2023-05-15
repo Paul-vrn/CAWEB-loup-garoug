@@ -55,7 +55,7 @@ const newPeriod = async (day: boolean, gameId: number) => {
         },
       });
 
-      // vire les gens de la spirit
+      // vire l'invité de la spirit chat room
       if (game.spiritChatRoomId !== null && day) {
         const spiritId = game.spiritChatRoomId;
         const spiritChat = await transaction.chatRoom.findUnique({

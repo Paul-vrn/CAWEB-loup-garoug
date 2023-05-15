@@ -1,4 +1,5 @@
 import { StatePlayer, TransactionType, Vote } from "database";
+import notificationService from "./notification";
 
 export const finishElection = async (transaction: TransactionType, electionId: number) => {
   const votes = await transaction.vote.findMany({
@@ -35,44 +36,44 @@ export const finishElection = async (transaction: TransactionType, electionId: n
         state: StatePlayer.DEAD,
       },
     });
-    const chatsId = await transaction.game.findUnique({
+    const game = await transaction.game.findUnique({
       where: { id: gameId },
       select: {
+        name: true,
         dayChatRoomId: true,
         nightChatRoomId: true,
       },
     });
-    if (!chatsId) {
-      throw Error;
-    } else {
-      await transaction.chatRoom.update({
-        where: { id: chatsId?.dayChatRoomId },
-        data: {
-          writers: {
-            disconnect: {
-              playerId_gameId_chatRoomId: {
-                playerId: killedPlayerId,
-                gameId,
-                chatRoomId: chatsId?.dayChatRoomId,
-              },
+    if (!game) throw Error;
+    notificationService.isDead(transaction, killedPlayerId, game.name);
+    // vire le mort des chat rooms
+    await transaction.chatRoom.update({
+      where: { id: game.dayChatRoomId },
+      data: {
+        writers: {
+          disconnect: {
+            playerId_gameId_chatRoomId: {
+              playerId: killedPlayerId,
+              gameId,
+              chatRoomId: game.dayChatRoomId,
             },
           },
         },
-      });
-      await transaction.chatRoom.update({
-        where: { id: chatsId?.nightChatRoomId },
-        data: {
-          writers: {
-            disconnect: {
-              playerId_gameId_chatRoomId: {
-                playerId: killedPlayerId,
-                gameId,
-                chatRoomId: chatsId?.nightChatRoomId,
-              },
+      },
+    });
+    await transaction.chatRoom.update({
+      where: { id: game.nightChatRoomId },
+      data: {
+        writers: {
+          disconnect: {
+            playerId_gameId_chatRoomId: {
+              playerId: killedPlayerId,
+              gameId,
+              chatRoomId: game.nightChatRoomId,
             },
           },
         },
-      });
-    }
+      },
+    });
   }
 };

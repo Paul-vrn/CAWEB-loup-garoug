@@ -95,6 +95,7 @@ const voteController = {
         async p =>
           await prisma.vote.findMany({
             where: {
+              electionId: electionId,
               targetId: p.userId,
             },
           })

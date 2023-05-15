@@ -73,6 +73,16 @@ const notificationService = {
     });
     await Promise.all(notificationPromise);
   },
+  async isDead(transaction: TransactionType, player: Player, gameName: string) {
+    await transaction.notification.create({
+      data: {
+        userId: player.userId,
+        title: `Vous êtes mort dans la partie ${gameName}`,
+        content: "Vous pouvez encore observer la partie mais vous ne pouvez plus voter",
+        link: "/games/" + player.gameId,
+      },
+    });
+  },
 };
 
 export default notificationService;
