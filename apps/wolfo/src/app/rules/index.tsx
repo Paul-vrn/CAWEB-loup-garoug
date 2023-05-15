@@ -11,7 +11,12 @@ const Rules = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Text style={styles.title}>Rules</Text>
+        <View style={styles.wrapperTitle}>
+          <View style={styles.line}>
+            <Text>{""}</Text>
+          </View>
+          <Text style={styles.title}>Rules</Text>
+        </View>
 
         <View style={styles.wrapperParagraph}>
           <Text style={styles.h2}>Introduction</Text>
@@ -38,7 +43,7 @@ const Rules = () => {
           <Text style={styles.h2}>The Powers</Text>
           <Text style={styles.paragraph}>
             Beyond the veil of mortal guise, some possess uncanny powers, only to be stirred under
-            the moon's glow: {"\n"}
+            the moon's glow: {"\n\n"}
             <Text style={styles.bulletPoint}>
               • Werewolves may spread their curse, transforming an unsuspecting villager into one of
               their own.{"\n"}
@@ -51,7 +56,7 @@ const Rules = () => {
               • Seers may glimpse into the true nature and power of one, shrouded in mystery.{"\n"}
             </Text>
             <Text style={styles.bulletPoint}>
-              • Spirits may converse with the dead, drawing wisdom from beyond the grave.{"\n"}
+              • Spirits may converse with the dead, drawing wisdom from beyond the grave.{"\n\n"}
             </Text>
             In death, your voice is silenced, your actions stilled, but your ghostly presence may
             linger, spectating the game's progress, and perhaps whispering to a spirit.
@@ -86,26 +91,54 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   h2: {
+    position: "absolute",
     fontSize: 22,
+    marginTop: -35,
+    backgroundColor: "#141313",
     color: "#C38100",
     fontFamily: "MontserratBold",
   },
   title: {
     paddingVertical: "5%",
     fontFamily: "Voyage",
-    fontSize: 45,
+    fontSize: 41,
+    marginTop: -10,
+    backgroundColor: "#141313",
     color: "#C38100",
     textAlign: "center",
+    paddingHorizontal: 10,
+    zIndex: 2,
   },
   paragraph: {
     fontSize: 16,
     color: "#C38100",
     textAlign: "justify",
     fontFamily: "Montserrat",
+    marginBottom: 5,
   },
   wrapperParagraph: {
+    padding: 20,
+    position: "relative",
+    paddingTop: 20,
     marginVertical: "4%",
     marginHorizontal: "7%",
+    border: "1px solid #C38100",
+  },
+  line: {
+    position: "absolute",
+    borderColor: "#C38100",
+    height: 0,
+    borderBottomWidth: 2,
+    width: "100%",
+  },
+  wrapperTitle: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "80%",
+    left: "10%",
+    marginBottom: 40,
   },
 });
 

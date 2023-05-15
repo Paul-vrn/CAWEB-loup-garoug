@@ -1,15 +1,14 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useContext } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Image } from "react-native";
-import image from "../../../../assets/images/sun_asset.png";
-import { useSearchParams } from "expo-router";
-import { AuthContext } from "../../../components/context/tokenContext";
 import { useQuery } from "@tanstack/react-query";
-import { getGame } from "../../../utils/api/game";
+import { Stack, useSearchParams } from "expo-router";
+import React, { useContext } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Game, Player, Role, StatePlayer } from "types";
-import { getPlayer } from "../../../utils/api/player";
+import image from "../../../../assets/images/sun_asset.png";
+import { AuthContext } from "../../../components/context/tokenContext";
 import Loading from "../../../components/loading";
+import { getGame } from "../../../utils/api/game";
+import { getPlayer } from "../../../utils/api/player";
 const messages = {
   victoryVillager: "The Villagers won! Every wolf was lynched, and the village was safely guarded",
   lossVillager: "Defeat! The village falls silent as darkness engulfs its once vibrant streets.",
@@ -69,6 +68,8 @@ const End = () => {
       : [messages.victoryVillager, messages.lossWolf];
   return (
     <SafeAreaView style={styles.container}>
+      <Stack.Screen options={{ title: `${game.name} end`, headerRight: () => null }} />
+
       <View style={styles.frame}>
         <>
           <Text style={[styles.text, styles.title]}>

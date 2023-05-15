@@ -49,6 +49,7 @@ const HomeLayout = () => {
                 screenOptions={{
                   headerStyle: { backgroundColor: "#141313" },
                   headerTintColor: "#C38100",
+                  headerShadowVisible: false,
                   headerRight: () => (
                     <TouchableOpacity testID="settings-button" onPress={() => router.push("/user")}>
                       <Image source={UserIcon} style={styles.image} />

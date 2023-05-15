@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     flex: Platform.OS === "web" ? 1 : undefined,
   },
   view: {
-    borderRadius: 24,
+    backgroundColor: "white",
   },
   text: {
     padding: "1em",

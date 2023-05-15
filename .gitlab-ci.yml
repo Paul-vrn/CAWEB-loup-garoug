@@ -88,7 +88,7 @@ test-backend:
 #    - pnpm dev > /dev/null 2>&1 & # lance l'api en mode dev
 #    - cd apps/wolfo
 #    - pnpm web &
-#    - npx wait-on 'http-get://localhost:19000'
+##    - npx wait-on 'http-get://localhost:19000'
 #    - curl -s http://localhost:19000
 #    - npx wait-on 'http-get://localhost:19000'
 #    - npx cypress run --record --parallel # lance l'app en mode dev

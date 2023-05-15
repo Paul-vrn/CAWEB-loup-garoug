@@ -51,6 +51,7 @@
     "PORT",
     "PROTOCOL",
     "BASE_URL",
+    "UTC_OFFSET",
     "NODE_ENV"
   ]
 }

@@ -1,6 +1,7 @@
 import { StateGame } from "database";
 import cron from "node-cron";
 import prisma from "../prisma";
+import { UTC_OFFSET } from "../utils/env";
 import newPeriod from "./game/newPeriod";
 import startGame from "./game/startGame";
 import { checkDeadline } from "./time";
@@ -51,9 +52,9 @@ export const createDeadlineJob = (deadline: Date, gameId: number, startDay: Date
     deadlineJobs[gameId].stop();
     delete deadlineJobs[gameId];
   }
-  const dateString = `${start.getUTCSeconds()} ${start.getUTCMinutes()} ${start.getUTCHours()} ${date.getUTCDate()} ${
-    date.getUTCMonth() + 1
-  } *`;
+  const dateString = `${start.getUTCSeconds()} ${start.getUTCMinutes()} ${
+    start.getUTCHours() + Number(UTC_OFFSET)
+  } ${date.getUTCDate()} ${date.getUTCMonth() + 1} *`;
   console.log("cron at ", dateString);
   const job = cron.schedule(dateString, async () => startGame(gameId));
   deadlineJobs[gameId] = job;

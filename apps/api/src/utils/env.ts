@@ -5,3 +5,4 @@ export const PORT = process.env.PORT || 3000;
 export const SECRET = process.env.SECRET || "secret";
 export const PROTOCOL = process.env.PROTOCOL || "http";
 export const BASE_URL = process.env.BASE_URL || "localhost:3000";
+export const UTC_OFFSET = process.env.UTC_OFFSET || 0;

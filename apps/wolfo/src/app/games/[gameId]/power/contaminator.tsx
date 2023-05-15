@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Text } from "@ui-kitten/components";
-import { useRouter, useSearchParams } from "expo-router";
+import { Stack, useRouter, useSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -85,6 +85,7 @@ const ContaminatorView = () => {
 
   return (
     <SafeAreaView style={styles.background}>
+      <Stack.Screen options={{ title: "Contaminator", headerRight: () => null }} />
       <ScrollView>
         <View style={styles.centeredView}>
           <View style={styles.wrapper}>

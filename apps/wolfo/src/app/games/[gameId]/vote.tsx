@@ -1,12 +1,13 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "expo-router";
-import React, { useContext, useRef } from "react";
+import { Stack, useRouter, useSearchParams } from "expo-router";
+import React, { useContext, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Game, Player, Role, StateGame, StatePlayer, Vote as VoteType } from "types";
 import { AuthContext } from "../../../components/context/tokenContext";
 import Loading from "../../../components/loading";
+import { ModalConfirmChoice } from "../../../components/modals/modalConfirm";
 import { getGame } from "../../../utils/api/game";
 import { getPlayer } from "../../../utils/api/player";
 import voteApi from "../../../utils/api/vote";
@@ -20,7 +21,7 @@ interface ChoiceProps {
 }
 const Choice = ({ choicePlayer, currentPlayer, electionId, nbVotes, currentVote }: ChoiceProps) => {
   const queryClient = useQueryClient();
-
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const confirmHandle = async () => {
     const vote: VoteType = {
       voterId: currentPlayer.userId,
@@ -54,9 +55,9 @@ const Choice = ({ choicePlayer, currentPlayer, electionId, nbVotes, currentVote 
 
   return (
     <View style={styles.container}>
-      <View style={styles.voteCount}>
+      {/* <View style={styles.voteCount}>
         <Text style={styles.text}>{nbVotes}</Text>
-      </View>
+      </View> */}
       <View
         style={[
           styles.buttonView,
@@ -72,6 +73,7 @@ const Choice = ({ choicePlayer, currentPlayer, electionId, nbVotes, currentVote 
         >
           {choicePlayer?.user!.name}
         </Text>
+        <Text style={[styles.text, styles.smallText]}>{nbVotes} Votes</Text>
       </View>
       {choicePlayer.state === StatePlayer.ALIVE && currentPlayer.state === StatePlayer.ALIVE ? (
         <Pressable
@@ -85,17 +87,30 @@ const Choice = ({ choicePlayer, currentPlayer, electionId, nbVotes, currentVote 
             if (choicePlayer.userId === currentVote?.targetId) {
               cancelHandle();
             } else {
-              confirmHandle();
+              setModalVisible(true);
             }
           }}
         >
-          <Text style={[styles.text, styles.buttonText]}>
+          <Text
+            style={[
+              styles.text,
+              styles.buttonText,
+              choicePlayer.userId === currentVote?.targetId ? styles.buttonCancelText : {},
+            ]}
+          >
             {choicePlayer.userId === currentVote?.targetId ? "Cancel" : "Vote"}
           </Text>
         </Pressable>
       ) : (
         <></>
       )}
+      <ModalConfirmChoice
+        title={"Voting against " + choicePlayer.user?.name!}
+        description={`Do you confirm your vote?`}
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        confirmFunction={confirmHandle}
+      />
     </View>
   );
 };
@@ -175,13 +190,22 @@ const Vote = () => {
   }
   return (
     <SafeAreaView style={styles.background}>
+      <Stack.Screen
+        options={{
+          title: (game.state === StateGame.DAY ? "Villager" : "Werewolf") + " vote",
+          headerRight: () => null,
+        }}
+      />
       <ScrollView>
         {game.state === StateGame.NIGHT && currentPlayer.role !== Role.WOLF ? (
           <Text style={[styles.text, styles.title]}>
             Can't vote at night. Come back in the morning!
           </Text>
         ) : (
-          <Text style={[styles.text, styles.title]}>It's time to vote!</Text>
+          <View style={styles.wrapperTitle}>
+            <View style={styles.line} />
+            <Text style={styles.h2}>Vote</Text>
+          </View>
         )}
         <View style={styles.mainView}>
           {game?.players.map(
@@ -205,13 +229,42 @@ const Vote = () => {
   );
 };
 const styles = StyleSheet.create({
+  wrapperTitle: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    marginTop: "10%",
+    marginBottom: 40,
+  },
+  line: {
+    position: "relative",
+    borderColor: "#C38100",
+    height: 0,
+    borderBottomWidth: 2,
+    width: "80%",
+  },
+  image: {
+    width: 200,
+    height: 200,
+  },
+  h2: {
+    backgroundColor: "#141313",
+    fontFamily: "Voyage",
+    fontSize: 37,
+    color: "#C38100",
+    zIndex: 1,
+    marginTop: -30,
+    paddingHorizontal: 10,
+  },
   background: {
     display: "flex",
     backgroundColor: "#141313",
     flex: 1,
   },
   mainView: {
-    marginTop: "10%",
+    marginTop: "5%",
     marginBottom: "10%",
     flexDirection: "column",
     justifyContent: "center",
@@ -231,24 +284,24 @@ const styles = StyleSheet.create({
     textAlign: "center",
     overflow: "visible",
   },
+  smallText: {
+    fontWeight: "normal",
+    marginBottom: 10,
+  },
   name: {
-    fontSize: 18,
+    marginTop: 10,
+    fontSize: 24,
   },
   title: {
     fontSize: 28,
-  },
-  containerBorder: {
-    borderStyle: "solid",
-    borderColor: "black",
-
-    borderWidth: 1,
   },
   container: {
     position: "relative",
     display: "flex",
     flexDirection: "row",
+    alignItems: "center",
     flexWrap: "nowrap",
-    height: 60,
+    paddingRight: 30,
     // width: "80%",
     borderBottomWidth: 2,
     borderColor: "transparent",
@@ -263,35 +316,35 @@ const styles = StyleSheet.create({
   },
   buttonCancel: {
     // borderRadius: 25,
-    // backgroundColor: "red",
+    backgroundColor: "#141313",
+    borderColor: "#C38100",
+    borderWidth: 1,
+    borderStyle: "solid",
+  },
+  buttonCancelText: {
+    color: "#C38100",
   },
   buttonContent: {
     position: "relative",
     display: "flex",
     justifyContent: "center",
-    borderWidth: 2,
-    borderStyle: "solid",
-    borderColor: "transparent",
     backgroundColor: "#C38100",
-    height: "100%",
+    borderRadius: 20,
     width: "15%",
+    height: "50%",
   },
   buttonText: {
     color: "#141313",
   },
   buttonView: {
-    paddingVertical: "3%",
     flexGrow: 1,
-    flexShrink: 1,
-    borderLeftWidth: 3,
-    borderRightWidth: 2,
     borderStyle: "solid",
+    padding: 10,
     borderColor: "#C38100",
     borderTopColor: "transparent",
     position: "relative",
     display: "flex",
     textAlign: "center",
-    height: "100%",
     justifyContent: "center",
   },
   deadPlayer: {
@@ -301,8 +354,8 @@ const styles = StyleSheet.create({
   selected: {
     // borderColor: "rgb(135, 113, 5)",
     // backgroundColor: "rgb(235, 212, 99)",
-    textDecorationLine: "underline",
-    textDecorationColor: "#C38100",
+    // textDecorationLine: "underline",
+    // textDecorationColor: "#C38100",
     fontStyle: "italic",
   },
   voteCount: {

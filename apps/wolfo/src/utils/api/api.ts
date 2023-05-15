@@ -1,8 +1,8 @@
 // ici on utilise axios et react query pour faire des requêtes http
 import axios from "axios";
 const api = axios.create({
-  //baseURL: "http://localhost:3000/api",
-  baseURL: "https://wolfo-backend.osc-fr1.scalingo.io/api",
+  baseURL: "http://localhost:3000/api",
+  //baseURL: "https://wolfo-backend.osc-fr1.scalingo.io/api",
   headers: {
     "Content-type": "application/json",
   },
