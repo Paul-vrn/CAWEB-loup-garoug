@@ -52,6 +52,7 @@ const GameView = () => {
     queryKey: ["mygames", gameId],
     queryFn: () => getGame(Number(gameId)),
     staleTime: 1000 * 60 * 5,
+    cacheTime: 0,
   });
   // get player data
   const {

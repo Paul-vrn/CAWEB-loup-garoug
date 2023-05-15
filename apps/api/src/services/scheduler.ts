@@ -63,13 +63,13 @@ export const createDeadlineJob = (deadline: Date, gameId: number, startDay: Date
 
 export const createNewDayJob = async (startDay: Date, gameId: number) => {
   const date = new Date(startDay);
-  const cronDate = `${date.getUTCMinutes()} ${date.getUTCHours()} * * *`;
+  const cronDate = `${date.getUTCMinutes()} ${date.getUTCHours() + Number(UTC_OFFSET)} * * *`;
   cron.schedule(cronDate, () => newPeriod(true, gameId));
 };
 
 export const createNewNightJob = (endDay: Date, gameId: number) => {
   const date = new Date(endDay);
-  const cronDate = `${date.getUTCMinutes()} ${date.getUTCHours()} * * *`;
+  const cronDate = `${date.getUTCMinutes()} ${date.getUTCHours() + Number(UTC_OFFSET)} * * *`;
   cron.schedule(cronDate, () => newPeriod(false, gameId));
 };
 // Fonction qui relance les parties en attente de joueurs dans le cas
