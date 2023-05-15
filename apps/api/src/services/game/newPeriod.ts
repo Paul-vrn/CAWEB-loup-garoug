@@ -49,7 +49,9 @@ const newPeriod = async (day: boolean, gameId: number) => {
         where: { id: gameId },
         data: {
           state,
-          curElecId: newElec.id,
+          curElec: {
+            connect: { id: newElec.id },
+          },
         },
       });
 
